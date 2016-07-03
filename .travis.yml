@@ -1,0 +1,13 @@
+language: python
+node_js:
+  - "0.10.25"
+before_install:
+  - npm install -g jshint
+python:
+  - "2.7"
+# command to install dependencies
+install: "pip install -r requirements.txt"
+# command to run tests
+script:
+  - flake8 apps/
+  - jshint apps/venues/static/venues/js/ho_alter_submit.js

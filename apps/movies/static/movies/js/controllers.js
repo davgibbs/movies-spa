@@ -10,13 +10,12 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
                 $scope.movies = data.results;
             });
 
-
     $scope.deleteMovie=function(movie){
-        console.log(movie);
         if(popupService.showPopup('Really delete this?')){
-            movie.$delete(function(){
-                $window.location.href='';
-            });
+            $http.delete("/api/movies/" + movie.id)
+                .success(function(data){
+                    $window.location.href='';
+                });
         }
     }
 
@@ -27,6 +26,8 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
 }).controller('MovieCreateController',function($scope,$state,$stateParams,Movie){
 
     $scope.movie=new Movie();
+
+    $scope.genres = ['action', 'drama']
 
     $scope.addMovie=function(){
         $scope.movie.$save(function(){
@@ -47,4 +48,5 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
     };
 
     $scope.loadMovie();
+
 });

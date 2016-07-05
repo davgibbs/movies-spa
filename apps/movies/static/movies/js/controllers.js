@@ -23,11 +23,15 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
 
     $scope.movie=Movie.get({id:$stateParams.id});
 
-}).controller('MovieCreateController',function($scope,$state,$stateParams,Movie){
+}).controller('MovieCreateController',function($scope,$state,$stateParams,Movie,$http){
 
     $scope.movie=new Movie();
 
-    $scope.genres = ['action', 'drama']
+    $scope.genres = []
+    $http.get("/api/movies-genres")
+            .success(function(data) {
+                $scope.genres = data.results;
+            });
 
     $scope.addMovie=function(){
         $scope.movie.$save(function(){
@@ -35,13 +39,19 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
         });
     }
 
-}).controller('MovieEditController',function($scope,$state,$stateParams,Movie){
+}).controller('MovieEditController',function($scope,$state,$stateParams,Movie,$http){
 
     $scope.updateMovie=function(){
         $scope.movie.$update(function(){
             $state.go('movies');
         });
     };
+
+    $scope.genres = []
+    $http.get("/api/movies-genres")
+            .success(function(data) {
+                $scope.genres = data.results;
+            });
 
     $scope.loadMovie=function(){
         $scope.movie=Movie.get({id:$stateParams.id});

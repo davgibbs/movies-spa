@@ -25,3 +25,9 @@ angular.module('movieApp').config(function($stateProvider,$httpProvider){
 }).run(function($state){
    $state.go('movies');
 });
+
+
+angular.module('movieApp').config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+}]);

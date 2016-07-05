@@ -3,7 +3,7 @@
  */
 
 angular.module('movieApp.services',[]).factory('Movie',function($resource){
-    return $resource('http://127.0.0.1:8000/api/movies/:id',{id:'@_id'},{
+    return $resource('/api/movies/:id',{id:'@id'},{
         update: {
             method: 'PUT'
         }

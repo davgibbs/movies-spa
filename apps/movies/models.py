@@ -20,7 +20,7 @@ class Movie(models.Model):
     )
 
     title = models.CharField(max_length=100, unique=True)
-    release_year = models.IntegerField()
+    release_year = models.PositiveIntegerField()
     director = models.CharField(max_length=100)
     genre = models.CharField(max_length=100, choices=MOVIE_GENRES)
 

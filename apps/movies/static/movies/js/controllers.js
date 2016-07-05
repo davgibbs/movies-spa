@@ -1,11 +1,18 @@
 /**
  * Created by Sandeep on 01/06/14.
  */
-angular.module('movieApp.controllers',[]).controller('MovieListController',function($scope,$state,popupService,$window,Movie){
+angular.module('movieApp.controllers',[]).controller('MovieListController',function($scope,$state,popupService,$window,Movie,$http){
 
-    $scope.movies=Movie.query();
+    $scope.movies = []
+
+    $http.get("/api/movies")
+            .success(function(data) {
+                $scope.movies = data.results;
+            });
+
 
     $scope.deleteMovie=function(movie){
+        console.log(movie);
         if(popupService.showPopup('Really delete this?')){
             movie.$delete(function(){
                 $window.location.href='';

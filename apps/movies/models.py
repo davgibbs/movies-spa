@@ -21,6 +21,7 @@ class Movie(models.Model):
     release_year = models.PositiveIntegerField()
     director = models.CharField(max_length=100)
     genre = models.ForeignKey(MovieGenre, verbose_name='Movie Genre', related_name='movie_genre')
+    image = models.ImageField(upload_to='movies/', default = 'movies/Movie.jpg')
 
     def __unicode__(self):
         return self.title

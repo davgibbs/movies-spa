@@ -9,6 +9,7 @@
 .movietable tr:nth-child(1) td{
     border-top: none;
 }
-a.nodecoration{
+
+.nodecoration{
     text-decoration:none;
 }

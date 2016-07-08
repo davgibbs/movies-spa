@@ -3,7 +3,7 @@
  */
 angular.module('movieApp.controllers',[]).controller('MovieListController',function($scope,$state,popupService,$window,Movie,$http){
 
-    $scope.movies = []
+    $scope.movies = [];
 
     $http.get("/api/movies")
             .success(function(data) {
@@ -17,7 +17,7 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
                     $window.location.href='';
                 });
         }
-    }
+    };
 
 }).controller('MovieViewController',function($scope,$stateParams,Movie){
 
@@ -27,7 +27,7 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
 
     $scope.movie=new Movie();
 
-    $scope.genres = []
+    $scope.genres = [];
     $http.get("/api/movies-genres")
             .success(function(data) {
                 $scope.genres = data.results;
@@ -37,7 +37,7 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
         $scope.movie.$save(function(){
             $state.go('movies');
         });
-    }
+    };
 
 }).controller('MovieEditController',function($scope,$state,$stateParams,Movie,$http){
 
@@ -47,7 +47,7 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
         });
     };
 
-    $scope.genres = []
+    $scope.genres = [];
     $http.get("/api/movies-genres")
             .success(function(data) {
                 $scope.genres = data.results;

@@ -11,5 +11,5 @@ angular.module('movieApp.services',[]).factory('Movie',function($resource){
 }).service('popupService',function($window){
     this.showPopup=function(message){
         return $window.confirm(message);
-    }
+    };
 });

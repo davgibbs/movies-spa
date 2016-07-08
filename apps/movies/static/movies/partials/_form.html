@@ -22,6 +22,12 @@
         <select data-ng-model="movie.genre" data-ng-options="genre.id as genre.name for genre in genres" class="form-control" id="plot"></select>
     </div>
 </div>
+<div class="form-group">
+    <label for="movie-image" class="col-sm-2 control-label">Movie Image</label>
+    <div class="col-sm-10">
+        <input type="file" ng-model="movie.image" onChange="angular.element(this).scope().setFile(this)" accept="image/*!" id="movie-image"></input>
+    </div>
+</div>
 
 <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">

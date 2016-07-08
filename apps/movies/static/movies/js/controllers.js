@@ -33,17 +33,42 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
                 $scope.genres = data.results;
             });
 
+    $scope.setFile = function(element) {
+          $scope.currentFile = element.files[0];
+          var reader = new FileReader();
+
+          reader.onload = function(event) {
+            $scope.image_source = event.target.result;
+
+            $scope.$apply();
+          }
+          // when the file is read it triggers the onload event above.
+          reader.readAsDataURL(element.files[0]);
+        }
+
     $scope.addMovie=function(){
-        $scope.movie.$save(function(){
-            $state.go('movies');
+//            console.log('add here');
+        $scope.movie.$save(function(data){
+//            console.log('here');
+//            if (data.error_message){
+//                popupService.showPopup('Error here: ' + data.error_message);
+//            }
+//            else {
+                $state.go('movies');
+//            }
         });
     };
 
 }).controller('MovieEditController',function($scope,$state,$stateParams,Movie,$http){
 
     $scope.updateMovie=function(){
-        $scope.movie.$update(function(){
-            $state.go('movies');
+        $scope.movie.$update(function(data){
+            if (data.error_message){
+                popupService.showPopup('Error here: ' + data.error_message);
+            }
+            else {
+                $state.go('movies');
+            }
         });
     };
 

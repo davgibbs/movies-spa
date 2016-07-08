@@ -2,9 +2,9 @@
  * Created by Sandeep on 01/06/14.
  */
 
-angular.module('movieApp',['ui.router','ngResource','movieApp.controllers','movieApp.services']);
+var myapp = angular.module('movieApp',['ui.router','ngResource','movieApp.controllers','movieApp.services']);
 
-angular.module('movieApp').config(function($stateProvider,$httpProvider){
+myapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
     $stateProvider.state('movies',{
         url:'/movies',
         templateUrl:'/static/movies/partials/movies.html',
@@ -22,18 +22,13 @@ angular.module('movieApp').config(function($stateProvider,$httpProvider){
         templateUrl:'/static/movies/partials/movie-edit.html',
         controller:'MovieEditController'
     });
+
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+
 }).run(function($state){
    $state.go('movies');
 });
-
-
-angular.module('movieApp').config(['$httpProvider', function($httpProvider) {
-    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-}]);
-
-angular.module('movieApp').config(function($interpolateProvider) {
-    $interpolateProvider.startSymbol('[[');
-    $interpolateProvider.endSymbol(']]');
-});
-

@@ -128,10 +128,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 #     'PAGE_SIZE': 10
 # }
 REST_FRAMEWORK = {
-     'PAGE_SIZE': 50
+    'PAGE_SIZE': 50
 }
 
 # User uploaded files "Media"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-

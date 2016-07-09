@@ -31,45 +31,59 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
     $http.get("/api/movies-genres")
             .success(function(data) {
                 $scope.genres = data.results;
-            });
-
-    $scope.setFile = function(element) {
-          $scope.currentFile = element.files[0];
-          var reader = new FileReader();
-
-          reader.onload = function(event) {
-            $scope.image_source = event.target.result;
-
-            $scope.$apply();
-          }
-          // when the file is read it triggers the onload event above.
-          reader.readAsDataURL(element.files[0]);
-        }
+            }); // The .success may be deprecated: https://docs.angularjs.org/api/ng/service/$http
+                // Good example: http://techfunda.com/howto/565/http-post-server-request
 
     $scope.addMovie=function(){
-//            console.log('add here');
-        $scope.movie.$save(function(data){
-//            console.log('here');
-//            if (data.error_message){
-//                popupService.showPopup('Error here: ' + data.error_message);
-//            }
-//            else {
+            var file = $scope.movie.myFile;
+            var uploadUrl = "/api/movies";
+
+            var fd = new FormData();
+            fd.append('image', file);
+            fd.append('director', $scope.movie.director)
+            fd.append('release_year', $scope.movie.release_year)
+            fd.append('title', $scope.movie.title)
+            fd.append('genre', $scope.movie.genre)
+
+            $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function(){
                 $state.go('movies');
-//            }
-        });
+            })
+            .error(function(){
+                console.log('error');
+            });
     };
 
 }).controller('MovieEditController',function($scope,$state,$stateParams,Movie,$http){
 
     $scope.updateMovie=function(){
-        $scope.movie.$update(function(data){
-            if (data.error_message){
-                popupService.showPopup('Error here: ' + data.error_message);
-            }
-            else {
+            if ($scope.movie.myFile === undefined){
+                var file = '';
+            }else{
+                var file = $scope.movie.myFile;
+            } // todo use the short hand of else in javascript ?:...
+            var uploadUrl = "/api/movies/" + $scope.movie.id;
+
+            var fd = new FormData();
+            fd.append('image', file);
+            fd.append('director', $scope.movie.director)
+            fd.append('release_year', $scope.movie.release_year)
+            fd.append('title', $scope.movie.title)
+            fd.append('genre', $scope.movie.genre)
+
+            $http.put(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function(){
                 $state.go('movies');
-            }
-        });
+            })
+            .error(function(){
+                console.log('error updating');
+            });
     };
 
     $scope.genres = [];

@@ -25,7 +25,9 @@
 <div class="form-group">
     <label for="movie-image" class="col-sm-2 control-label">Movie Image</label>
     <div class="col-sm-10">
-        <input type="file" ng-model="movie.image" onChange="angular.element(this).scope().setFile(this)" accept="image/*!" id="movie-image"></input>
+        <!--<input type="file" ng-model="movie.image" accept="image/*!" id="movie-image">-->
+        <img src="[[movie.image]]" alt="Movie Image" height="42" width="42">
+        <input type="file" file-model="movie.myFile" id="movie-image">
     </div>
 </div>
 

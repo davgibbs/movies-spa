@@ -2,6 +2,8 @@
 <!DOCTYPE html>
   <html data-ng-app="movieApp">
   <head lang="en">
+
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">-->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,10 +33,11 @@
       </div>
     </div>
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>-->
-    <script src="{% static 'movies/lib/angular.min.js' %}"></script>
+    <script src="{% static 'movies/lib/angular.min.js' %}"></script> <!-- get most recent angular -->
     <script src="{% static 'movies/js/app.js' %}"></script>
     <script src="{% static 'movies/js/controllers.js' %}"></script>
     <script src="{% static 'movies/js/services.js' %}"></script>
+    <script src="{% static 'movies/js/directives.js' %}"></script>
     <script src="{% static 'movies/lib/angular-ui-router.min.js' %}"></script>
     <script src="{% static 'movies/lib/angular-resource.min.js' %}"></script>
   </body>

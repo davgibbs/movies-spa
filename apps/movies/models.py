@@ -18,6 +18,7 @@ class MovieGenre(models.Model):
 class Movie(models.Model):
     """ Movie Information """
     title = models.CharField(max_length=100, unique=True)
+    created_date = models.DateTimeField(auto_now_add=True)
     release_year = models.PositiveIntegerField()
     director = models.CharField(max_length=100)
     genre = models.ForeignKey(MovieGenre, verbose_name='Movie Genre', related_name='movie_genre')

@@ -1,10 +1,13 @@
 <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Movie</a>
+<br>
+<br>
+<p>Search <input type="text" ng-model="test"></p>
 <table class="table movietable">
     <tr>
         <td><h3>All Movies</h3></td>
         <td></td>
     </tr>
-    <tr ng-repeat="movie in movies">
+    <tr ng-repeat="movie in movies| filter : test">
         <td>[[movie.title]]</td>
         <td>
             <a class="btn btn-primary" ui-sref="viewMovie({id:movie.id})">View</a>

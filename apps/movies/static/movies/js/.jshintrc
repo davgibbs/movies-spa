@@ -1,0 +1,11 @@
+{
+    "strict"        : true,  // Require `use strict` pragma  in every file.
+    "globalstrict"  : true,  // Allow global "use strict" (also enables 'strict').
+    // Custom Globals
+    "globals": {
+        "jQuery": false,
+        "angular": false,
+        "console": false,
+        "FormData": false
+    }
+}

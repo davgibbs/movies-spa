@@ -1,6 +1,4 @@
-/**
- * Created by Sandeep on 01/06/14.
- */
+'use strict';
 
 var myapp = angular.module('movieApp',['ui.router','ngResource','movieApp.controllers','movieApp.services']);
 
@@ -28,8 +26,6 @@ myapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
 
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
-
-    //$httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
 }).run(function($state){
    $state.go('movies');

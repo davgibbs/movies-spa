@@ -1,6 +1,5 @@
-/**
- * Created by Sandeep on 01/06/14.
- */
+'use strict';
+
 angular.module('movieApp.controllers',[]).controller('MovieListController',function($scope,$state,popupService,$window,Movie,$http){
 
     $scope.movies = [];

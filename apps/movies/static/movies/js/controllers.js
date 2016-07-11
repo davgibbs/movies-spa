@@ -40,10 +40,10 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
 
             var fd = new FormData();
             fd.append('image', file);
-            fd.append('director', $scope.movie.director)
-            fd.append('release_year', $scope.movie.release_year)
-            fd.append('title', $scope.movie.title)
-            fd.append('genre', $scope.movie.genre)
+            fd.append('director', $scope.movie.director);
+            fd.append('release_year', $scope.movie.release_year);
+            fd.append('title', $scope.movie.title);
+            fd.append('genre', $scope.movie.genre);
 
             $http.post(uploadUrl, fd, {
                 transformRequest: angular.identity,
@@ -60,19 +60,20 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
 }).controller('MovieEditController',function($scope,$state,$stateParams,Movie,$http){
 
     $scope.updateMovie=function(){
+            var file;
             if ($scope.movie.myFile === undefined){
-                var file = '';
+                file = '';
             }else{
-                var file = $scope.movie.myFile;
+                file = $scope.movie.myFile;
             } // todo use the short hand of else in javascript ?:...
             var uploadUrl = "/api/movies/" + $scope.movie.id;
 
             var fd = new FormData();
             fd.append('image', file);
-            fd.append('director', $scope.movie.director)
-            fd.append('release_year', $scope.movie.release_year)
-            fd.append('title', $scope.movie.title)
-            fd.append('genre', $scope.movie.genre)
+            fd.append('director', $scope.movie.director);
+            fd.append('release_year', $scope.movie.release_year);
+            fd.append('title', $scope.movie.title);
+            fd.append('genre', $scope.movie.genre);
 
             $http.put(uploadUrl, fd, {
                 transformRequest: angular.identity,

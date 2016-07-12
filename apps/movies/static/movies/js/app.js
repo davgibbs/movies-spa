@@ -19,6 +19,10 @@ myapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
         url:'/movies/:id/edit',
         templateUrl:'/static/movies/partials/movie-edit.html',
         controller:'MovieEditController'
+    }).state('about',{
+        url:'/about',
+        templateUrl:'/static/movies/partials/about.html',
+        controller: null
     });
 
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';

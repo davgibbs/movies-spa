@@ -18,11 +18,11 @@
           <a class="navbar-brand" ui-sref="movies">The Movie App</a>
         </div>
         <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li active-link="active">
+          <ul class="nav navbar-nav" ng-controller="NavigationCtrl">
+            <li ng-class="{ active: isCurrentPath('/movies') }">
                 <a ui-sref="movies">Home</a>
             </li>
-            <li active-link="active">
+            <li ng-class="{ active: isCurrentPath('/about') }">
                 <a ui-sref="about">About</a>
             </li>
           </ul>

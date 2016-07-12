@@ -98,4 +98,8 @@ angular.module('movieApp.controllers',[]).controller('MovieListController',funct
 
     $scope.loadMovie();
 
-});
+}).controller('NavigationCtrl', ['$scope', '$location', function ($scope, $location) {
+    $scope.isCurrentPath = function (path) {
+      return $location.path().startsWith(path);
+    };
+  }]);

@@ -1,13 +1,13 @@
 'use strict';
 
-angular.module('movieApp.controllers',[]).controller('MovieListController',function($scope,$state,popupService,$window,Movie,$http){
+angular.module('movieApp.controllers',['angularUtils.directives.dirPagination']).controller('MovieListController',function($scope,$state,popupService,$window,Movie,$http){
 
     $scope.movies = [];
 
     $http.get("/api/movies")
             .success(function(data) {
                 $scope.movies = data.results;
-            });
+            }); // Ajax request to fetch data into movies
 
     $scope.deleteMovie=function(movie){
         if(popupService.showPopup('Really delete this?')){

@@ -2,8 +2,7 @@ language: python
 node_js:
   - "0.10.25"
 before_install:
-  - npm install -g jshint
-  - npm install -g csslint
+  - npm install -g jshint csslint
 python:
   - "2.7"
 # command to install dependencies

@@ -2,7 +2,7 @@ language: python
 node_js:
   - "0.10.25"
 before_install:
-  - npm install -g jshint csslint
+  - npm install -g jshint csslint node-qunit-phantomjs
 python:
   - "2.7"
 # command to install dependencies
@@ -12,3 +12,4 @@ script:
   - flake8 apps/
   - jshint apps/movies/static/movies/js/
   - csslint apps/movies/static/movies/css/app.css
+  - node-qunit-phantomjs apps/movies/static/movies/test/test.html 

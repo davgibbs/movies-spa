@@ -1,8 +1,8 @@
 'use strict';
 
-var myapp = angular.module('movieApp',['ui.router','ngResource','movieApp.controllers','movieApp.services']);
+var movieapp = angular.module('movieApp',['ui.router','ngResource','movieApp.controllers','movieApp.services']);
 
-myapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
+movieapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
     $stateProvider.state('movies',{
         url:'/movies',
         templateUrl:'/static/movies/partials/movies.html',
@@ -21,8 +21,7 @@ myapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
         controller:'MovieEditController'
     }).state('about',{
         url:'/about',
-        templateUrl:'/static/movies/partials/about.html',
-        controller: null
+        templateUrl:'/static/movies/partials/about.html'
     });
 
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -36,7 +35,7 @@ myapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
 });
 
 
-myapp.directive('fileModel', ['$parse', function ($parse) {
+movieapp.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {

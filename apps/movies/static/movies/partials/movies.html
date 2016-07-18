@@ -8,14 +8,15 @@
         <td></td>
     </tr>
     <tr dir-paginate="movie in movies| filter : test|itemsPerPage:5">
-        <td><img src="[[movie.image]]" alt="Movie Image" height="42" width="42">
-        [[movie.title]]</td>
+        <td>
+            <img ng-src="[[movie.image]]" alt="Movie Image" height="42" width="42"> [[movie.title]]
+        </td>
         <td>
             <a class="btn btn-primary" ui-sref="viewMovie({id:movie.id})">View</a>
             <a class="btn btn-danger"  ng-click="deleteMovie(movie)">Delete</a>
         </td>
     </tr>
 </table>
-<div style="text-align: center;">
-<dir-pagination-controls max-size="5" direction-links="false" boundary-links="true" ></dir-pagination-controls>
+<div class="centre_text">
+    <dir-pagination-controls max-size="5" direction-links="false" boundary-links="true" ></dir-pagination-controls>
 <div>

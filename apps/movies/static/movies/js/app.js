@@ -24,6 +24,8 @@ movieapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
         templateUrl:'/static/movies/partials/about.html'
     });
 
+    // django and angular both support csrf tokens. This tells
+    // angular which cookie to add to what header.
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 

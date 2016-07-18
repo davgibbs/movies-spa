@@ -130,7 +130,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # Anything bigger than page size will not be returned from server. Is this ok?
 # For speed on a small site, it is okay for the moment
 REST_FRAMEWORK = {
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 100,
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 # User uploaded files "Media"

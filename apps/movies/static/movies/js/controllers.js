@@ -98,8 +98,8 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
 
     $scope.loadMovie();
 
-}).controller('NavigationCtrl', ['$scope', '$location', function ($scope, $location) {
+}).controller('NavigationCtrl', function ($scope, $location) {
     $scope.isCurrentPath = function (path) {
       return $location.path().startsWith(path);
     };
-  }]);
+  });

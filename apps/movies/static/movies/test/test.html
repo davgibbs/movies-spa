@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>QUnit tests</title>
-<link rel="stylesheet"
-href="https://code.jquery.com/qunit/qunit-2.0.0.css">
+    <title>QUnit tests</title>
+    <link rel="stylesheet" href="./lib/qunit-1.14.0.css">
 </head>
 <body>
- <h1 id="qunit-header">QUnit Test Suite</h1>
- <h2 id="qunit-banner"></h2>
- <div id="qunit-testrunner-toolbar"></div>
- <h2 id="qunit-userAgent"></h2>
- <ol id="qunit-tests"></ol>
- <div id="qunit"></div>
- <div id="qunit-fixture"></div>
- <script src="../lib/angular.min.js">
- </script>
- <script src="../js/app.js">
- </script>
- <script src="../js/controllers.js">
- </script>
- <script src="https://code.jquery.com/qunit/qunit-2.0.0.js">
- </script>
- <script src="./controllers_tests.js">
- </script>
+    <h1 id="qunit-header">QUnit Test Suite</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+
+    <script src="./lib/qunit-1.14.0.js"></script>
+    <script src="../lib/angular.min.js"> </script>
+<!--    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"> </script>-->
+    <script src="./lib/angular-mocks.js"></script>
+    <script src="./lib/sinon-1.17.2.js"></script>
+
+    <script src="../lib/angular-ui-router.min.js"></script>
+    <script src="../lib/angular-resource.min.js"></script>
+    <script src="../lib/dirPagination.js"></script>
+
+    <script src="../js/app.js"> </script>
+    <script src="../js/services.js"> </script>
+    <script src="../js/controllers.js"></script>
+
+    <script src="./controllers_tests.js"> </script>
 </body>
 </html>

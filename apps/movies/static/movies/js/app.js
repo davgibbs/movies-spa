@@ -1,8 +1,9 @@
 'use strict';
 
-var movieapp = angular.module('movieApp',['ui.router','ngResource','movieApp.controllers','movieApp.services']);
+var movieapp = angular.module('movieApp', ['ui.router','ngResource', 'movieApp.controllers','movieApp.services']);
 
-movieapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
+movieapp.config(function($stateProvider,$urlRouterProvider,$httpProvider,$interpolateProvider){
+
     $stateProvider.state('movies',{
         url:'/movies',
         templateUrl:'/static/movies/partials/movies.html',
@@ -24,6 +25,9 @@ movieapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
         templateUrl:'/static/movies/partials/about.html'
     });
 
+    // For any unmatched url, redirect to /movies
+    $urlRouterProvider.otherwise('/movies');
+
     // django and angular both support csrf tokens. This tells
     // angular which cookie to add to what header.
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -32,8 +36,6 @@ movieapp.config(function($stateProvider,$httpProvider,$interpolateProvider){
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
 
-}).run(function($state){
-   $state.go('movies');
 });
 
 

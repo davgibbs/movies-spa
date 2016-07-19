@@ -1,3 +1,36 @@
-QUnit.test( "hello test", function( assert ) {
-  assert.ok( 1 == "1", "Passed!" );
+//(function() {
+
+
+var $controller, $location;
+
+module("NavigationCtrl Tests", {
+    setup: function() {
+        var injector = angular.injector([ 'ng', 'movieApp' ]);
+        scope = injector.get('$rootScope').$new();
+
+        $location = {
+            path: function() {return '/home';}
+        };
+
+        controller = injector.get('$controller');
+        controller('NavigationCtrl', {
+            $scope : scope,
+            $location: $location
+        });
+    }
 });
+
+test("NavigationCtrl", function() {
+    current_page = scope.isCurrentPath('/about');
+    strictEqual(current_page, false, "check return false for active");
+
+    current_page = scope.isCurrentPath('/home');
+    strictEqual(current_page, true, "check return true for home");
+});
+
+test("Path ok", function () {
+    equal(true, true);
+});
+
+
+//})();

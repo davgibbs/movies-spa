@@ -2,7 +2,7 @@ language: python
 node_js:
   - "0.10.25"
 before_install:
-  - npm install -g jshint csslint node-qunit-phantomjs
+  - npm install -g jshint csslint phantomjs-prebuilt node-qunit-phantomjs
 python:
   - "2.7"
 # command to install dependencies

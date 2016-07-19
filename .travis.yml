@@ -12,4 +12,5 @@ script:
   - flake8 apps/
   - jshint apps/movies/static/movies/js/
   - csslint apps/movies/static/movies/css/app.css
+  - phantomjs -v
   - node-qunit-phantomjs apps/movies/static/movies/test/test.html

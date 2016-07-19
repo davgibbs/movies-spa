@@ -2,7 +2,7 @@ language: python
 node_js:
   - "0.10.25"
 before_install:
-  - npm install -g jshint csslint phantomjs-prebuilt@2.1.1 node-qunit-phantomjs
+  - npm install -g jshint csslint phantomjs-prebuilt node-qunit-phantomjs
 python:
   - "2.7"
 # command to install dependencies
@@ -13,4 +13,5 @@ script:
   - jshint apps/movies/static/movies/js/
   - csslint apps/movies/static/movies/css/app.css
   - phantomjs -v
+  - whereis phantomjs
   - node-qunit-phantomjs apps/movies/static/movies/test/test.html --verbose

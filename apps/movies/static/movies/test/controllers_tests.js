@@ -9,7 +9,7 @@ module("NavigationCtrl Tests", {
         scope = injector.get('$rootScope').$new();
 
         $location = {
-            path: function() {return '/home';}
+            path: function() {return '/movies/1';}
         };
 
         controller = injector.get('$controller');
@@ -24,13 +24,8 @@ test("NavigationCtrl", function() {
     current_page = scope.isCurrentPath('/about');
     strictEqual(current_page, false, "check return false for active");
 
-    current_page = scope.isCurrentPath('/home');
-    strictEqual(current_page, true, "check return true for home");
+    current_page = scope.isCurrentPath('/movies');
+    strictEqual(current_page, true, "check return true for movies");
 });
-
-test("Path ok", function () {
-    equal(true, true);
-});
-
 
 //})();

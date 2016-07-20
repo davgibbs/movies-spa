@@ -20,7 +20,7 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
 
 }).controller('MovieViewController',function($scope,$stateParams,Movie){
 
-    $scope.movie=Movie.get({id:$stateParams.id});
+    $scope.movie = Movie.get({id:$stateParams.id});
 
 }).controller('MovieCreateController',function($scope,$state,$stateParams,Movie,$http){
 

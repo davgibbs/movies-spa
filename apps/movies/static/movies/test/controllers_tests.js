@@ -1,3 +1,5 @@
+"use strict";
+
 (function() {
 
     var $controller, $location;
@@ -11,7 +13,10 @@
         }
     });
 
+
     test("NavigationCtrl", function() {
+        var current_page;
+
         this.$location = {
             path: function() {return '/movies/1';}
         };
@@ -21,9 +26,9 @@
         });
 
         current_page = this.$scope.isCurrentPath('/about');
-        strictEqual(current_page, false, "check return false for active");
+        strictEqual(current_page, false, "check return false for about on movies");
         current_page = this.$scope.isCurrentPath('/movies');
-        strictEqual(current_page, true, "check return true for movies");
+        strictEqual(current_page, true, "check return true for movies on movies");
 
         this.$location = {
             path: function() {return '/about';}
@@ -34,10 +39,31 @@
         });
 
         current_page = this.$scope.isCurrentPath('/about');
-        strictEqual(current_page, true, "check return false for active");
+        strictEqual(current_page, true, "check return true for about on about");
         current_page = this.$scope.isCurrentPath('/movies');
-        strictEqual(current_page, false, "check return true for movies");
+        strictEqual(current_page, false, "check return false for movies on about");
+    });
+
+
+    test("MovieViewController", function() {
+        this.$stateParams = {
+            id: 2
+        };
+        var Movie = { get: function() {return {movie_name: 'star trek'};} };
+
+        $controller('MovieViewController', {
+            $scope : this.$scope,
+            $stateParams: this.$stateParams,
+            Movie : Movie
+        });
+
+        Movie.get();
+
+        var expected = {"movie_name":"star trek"};
+
+        strictEqual(JSON.stringify(this.$scope.movie), JSON.stringify(expected), "check correct returned movie");
 
     });
+
 
 })();

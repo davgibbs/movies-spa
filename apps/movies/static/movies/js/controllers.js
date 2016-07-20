@@ -100,6 +100,8 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
 
 }).controller('NavigationCtrl', function ($scope, $location) {
     $scope.isCurrentPath = function (path) {
-      return $location.path().startsWith(path);
+      // Not using $location.path().startsWith(path); as not supported in all browsers (phantomjs)
+      // http://stackoverflow.com/questions/646628/how-to-check-if-a-string-startswith-another-string
+      return ($location.path().substr(0, path.length) == path);
     };
   });

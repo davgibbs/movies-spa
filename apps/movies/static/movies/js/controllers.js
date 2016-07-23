@@ -43,16 +43,18 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
             fd.append('release_year', $scope.movie.release_year);
             fd.append('title', $scope.movie.title);
             fd.append('genre', $scope.movie.genre);
+            fd.append('rating', $scope.movie.rating);
 
             $http.post(uploadUrl, fd, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
-            .success(function(){
-                $state.go('movies');
+            .success(function(data, status, headers, config){
+                console.log(data);
+                $state.go('viewMovie', {id: data.id});
             })
             .error(function(){
-                console.log('error');
+                console.log('error adding');
             });
     };
 
@@ -73,13 +75,14 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
             fd.append('release_year', $scope.movie.release_year);
             fd.append('title', $scope.movie.title);
             fd.append('genre', $scope.movie.genre);
+            fd.append('rating', $scope.movie.rating);
 
             $http.put(uploadUrl, fd, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
             .success(function(){
-                $state.go('movies');
+                $state.go('viewMovie', {id: $scope.movie.id});
             })
             .error(function(){
                 console.log('error updating');
@@ -104,4 +107,20 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
       // http://stackoverflow.com/questions/646628/how-to-check-if-a-string-startswith-another-string
       return ($location.path().substr(0, path.length) == path);
     };
-  });
+  })
+
+.controller('RatingDemoCtrl', function ($scope) {
+  $scope.movie.rating = 3;
+  $scope.max = 5;
+  $scope.isReadonly = false;
+
+  $scope.hoveringOver = function(value) {
+    $scope.overStar = value;
+    $scope.percent = 100 * (value / $scope.max);
+  };
+
+
+})
+;
+
+

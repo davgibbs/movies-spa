@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.validators import MaxValueValidator
 from django.db import models
 
 
@@ -23,6 +24,7 @@ class Movie(models.Model):
     director = models.CharField(max_length=100)
     genre = models.ForeignKey(MovieGenre, verbose_name='Movie Genre', related_name='movie_genre')
     image = models.ImageField(upload_to='movies/', default='movies/Movie.jpg')
+    rating = models.PositiveIntegerField(validators=[MaxValueValidator(5)], default=3)
 
     def __unicode__(self):
         return self.title

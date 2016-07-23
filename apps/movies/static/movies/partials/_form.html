@@ -25,11 +25,21 @@
 <div class="form-group">
     <label for="movie-image" class="col-sm-2 control-label">Movie Image</label>
     <div class="col-sm-10">
-        <img ng-src="[[movie.image]]" alt="Movie Image" height="42" width="42">
         <input type="file" file-model="movie.myFile" accept="image/*!" id="movie-image">
+        <img ng-src="[[movie.image]]" alt="Movie Image" height="42" width="42">
     </div>
 </div>
-
+ <div class="form-group">
+    <label for="movie-rating" class="col-sm-2 control-label">Movie Rating</label>
+    <div class="col-sm-10" ng-controller="RatingDemoCtrl">
+        <div>
+            <span uib-rating ng-model="movie.rating" max="max" read-only="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null" titles="['on
+e','two','three']" aria-labelledby="default-rating" for="movie-rating"></span>
+        <span class="label" ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}" ng-show=
+"overStar && !isReadonly">[[percent]]%</span>
+        </div>
+    </div>
+</div>
 <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
         <input type="submit" class="btn btn-primary" value="Save"/>

@@ -1,14 +1,15 @@
 'use strict';
 
-var movieapp = angular.module('movieApp', ['ui.router','ngResource', 'movieApp.controllers','movieApp.services']);
+var movieapp = angular.module('movieApp', ['ui.router','ngResource', 'ngAnimate', 'ui.bootstrap', 'movieApp.controllers','movieApp.services']);
 
 movieapp.config(function($stateProvider,$urlRouterProvider,$httpProvider,$interpolateProvider){
 
-    $stateProvider.state('movies',{
+    $stateProvider.
+    state('movies',{
         url:'/movies',
         templateUrl:'/static/movies/partials/movies.html',
-        controller:'MovieListController'
-    }).state('viewMovie',{
+        controller:'MovieListController'}).
+    state('viewMovie',{
        url:'/movies/:id/view',
        templateUrl:'/static/movies/partials/movie-view.html',
        controller:'MovieViewController'
@@ -54,3 +55,4 @@ movieapp.directive('fileModel', ['$parse', function ($parse) {
         }
     };
 }]);
+

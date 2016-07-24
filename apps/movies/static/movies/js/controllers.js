@@ -107,9 +107,8 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
       // http://stackoverflow.com/questions/646628/how-to-check-if-a-string-startswith-another-string
       return ($location.path().substr(0, path.length) == path);
     };
-  })
 
-.controller('RatingDemoCtrl', function ($scope) {
+}).controller('RatingDemoCtrl', function ($scope) {
   $scope.movie.rating = 3;
   $scope.max = 5;
   $scope.isReadonly = false;
@@ -118,9 +117,5 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
     $scope.overStar = value;
     $scope.percent = 100 * (value / $scope.max);
   };
-
-
 })
 ;
-
-

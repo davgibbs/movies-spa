@@ -27,7 +27,9 @@
     </tr>
     <tr>
         <td>Movie Rating</td>
-        <td>[[movie.rating]] stars</td>
+        <td ng-controller="RatingDemoCtrl">
+            <span uib-rating ng-model="movie.rating" read-only="true" aria-labelledby="default-rating" for="movie-rating"></span>
+        </td>
     </tr>
 </table>
 <div>

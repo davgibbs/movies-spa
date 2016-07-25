@@ -4,17 +4,25 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
 
     $scope.movies = [];
 
-    $http.get("/api/movies")
-            .success(function(data) {
-                $scope.movies = data.results;
-            }); // Ajax request to fetch data into movies
+ // Ajax request to fetch data into movies
+    $http.get("/api/movies")  
+                .then(function successCallback(response) {
+                        $scope.movies = response.data.results;
+                  }, function errorCallback(response) {
+                    console.log(response.data);
+                    console.log('error getting all');
+                  });
 
     $scope.deleteMovie=function(movie){
         if(popupService.showPopup('Really delete this?')){
             $http.delete("/api/movies/" + movie.id)
-                .success(function(data){
-                    $window.location.href='';
-                });
+                .then(function successCallback(response) {
+                        $window.location.href='';
+                  }, function errorCallback(response) {
+                    console.log(response.data);
+                    console.log('error deleting ');
+                        $window.location.href='';
+                  });
         }
     };
 
@@ -28,10 +36,13 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
 
     $scope.genres = [];
     $http.get("/api/movies-genres")
-            .success(function(data) {
-                $scope.genres = data.results;
-            }); // The .success may be deprecated: https://docs.angularjs.org/api/ng/service/$http
-                // Good example: http://techfunda.com/howto/565/http-post-server-request
+
+                .then(function successCallback(response) {
+                        $scope.genres = response.data.results;
+                  }, function errorCallback(response) {
+                    console.log(response.data);
+                    console.log('error getting all');
+                  });
 
     $scope.addMovie=function(){
             var file = $scope.movie.myFile;
@@ -48,14 +59,17 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
             $http.post(uploadUrl, fd, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
-            })
-            .success(function(data, status, headers, config){
-                console.log(data);
-                $state.go('viewMovie', {id: data.id});
-            })
-            .error(function(){
-                console.log('error adding');
-            });
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+                $state.go('viewMovie', {id: response.data.id});
+              }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                console.log(response.data);
+                console.log('error adding ' + response.data);
+              });
+
     };
 
 }).controller('MovieEditController',function($scope,$state,$stateParams,Movie,$http){
@@ -81,12 +95,17 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })
-            .success(function(){
+            .then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
                 $state.go('viewMovie', {id: $scope.movie.id});
-            })
-            .error(function(){
+              }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                console.log(response.data);
                 console.log('error updating');
-            });
+              });
+
     };
 
     $scope.genres = [];

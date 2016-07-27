@@ -1,22 +1,21 @@
+<div class="centre_text">
 <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Movie</a>
 <br>
 <br>
-<p>Search <input type="text" ng-model="test"></p>
-<table class="table movietable">
-    <tr>
-        <td><h3>All Movies</h3></td>
-        <td></td>
-    </tr>
-    <tr dir-paginate="movie in movies| filter : test|itemsPerPage:5">
-        <td>
-            <img ng-src="[[movie.image]]" alt="Movie Image" height="42" width="42"> [[movie.title]]
-        </td>
-        <td>
-            <a class="btn btn-primary" ui-sref="viewMovie({id:movie.id})">View</a>
-            <a class="btn btn-danger"  ng-click="deleteMovie(movie)">Delete</a>
-        </td>
-    </tr>
-</table>
-<div class="centre_text">
-    <dir-pagination-controls max-size="5" direction-links="false" boundary-links="true" ></dir-pagination-controls>
-<div>
+  <p>Search <input type="text" ng-model="test"></p> <div>
+  <div class="col-lg-4 product-cell" dir-paginate="movie in movies | filter : test |itemsPerPage:6">
+    <div class="thumbnail">
+      <img ng-src="[[movie.image]]" alt="Smiley face">
+      <div class="caption">
+        <h3>[[movie.title]]</h3>
+        <p>
+            <a href="#/movies/[[movie.id]]/view" class="btn btn-small btn-primary">Read more</a> 
+            <a class="btn btn-danger"  ng-click="deleteMovie(movie)">Delete</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="centre_text">
+     <dir-pagination-controls max-size="6" direction-links="false" boundary-links="true" ></dir-pagination-controls>
+ <div>
+

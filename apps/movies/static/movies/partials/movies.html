@@ -2,7 +2,7 @@
 <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Movie</a>
 <br>
 <br>
-  <p>Search <input type="text" ng-model="test"></p> <div>
+  <p><input type="text" class="form-control" ng-model="test" placeholder="Search"></p> <div> <!-- get in line with Add?-->
   <div class="col-lg-4 product-cell" dir-paginate="movie in movies | filter : test |itemsPerPage:6">
     <div class="thumbnail">
       <img ng-src="[[movie.image]]" alt="Smiley face">

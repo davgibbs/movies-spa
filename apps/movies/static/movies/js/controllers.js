@@ -4,6 +4,8 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
 
     $scope.movies = [];
 
+    $scope.order_by_options = ['title', 'year'];
+
  // Ajax request to fetch data into movies
     $http.get("/api/movies")  
                 .then(function successCallback(response) {
@@ -36,13 +38,12 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
 
     $scope.genres = [];
     $http.get("/api/movies-genres")
-
-                .then(function successCallback(response) {
-                        $scope.genres = response.data.results;
-                  }, function errorCallback(response) {
-                    console.log(response.data);
-                    console.log('error getting all');
-                  });
+        .then(function successCallback(response) {
+                $scope.genres = response.data.results;
+          }, function errorCallback(response) {
+            console.log(response.data);
+            console.log('error getting all');
+          });
 
     $scope.addMovie=function(){
             var file = $scope.movie.myFile;

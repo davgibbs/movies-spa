@@ -17,9 +17,9 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="plot" class="col-sm-2 control-label">Movie Genre</label>
+    <label for="movie-genre" class="col-sm-2 control-label">Movie Genre</label>
     <div class="col-sm-10">
-        <select data-ng-model="movie.genre" data-ng-options="genre.id as genre.name for genre in genres" class="form-control" id="plot"></select>
+        <select data-ng-model="movie.genre" data-ng-options="genre.id as genre.name for genre in genres" class="form-control" id="movie-genre"></select>
     </div>
 </div>
 <div class="form-group">
@@ -34,7 +34,7 @@
     <div class="col-sm-10" ng-controller="RatingDemoCtrl">
         <div>
             <span uib-rating ng-model="movie.rating" max="max" read-only="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null" titles="['on
-e','two','three']" aria-labelledby="default-rating" for="movie-rating"></span>
+e','two','three']" aria-labelledby="default-rating" id="movie-rating"></span>
         <span class="label" ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}" ng-show=
 "overStar && !isReadonly">[[percent]]%</span>
         </div>

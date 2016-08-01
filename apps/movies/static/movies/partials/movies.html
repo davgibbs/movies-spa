@@ -1,16 +1,20 @@
 <div class="centre_text">
-<a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Movie</a>
-<br>
-<br>
+  <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Movie</a>
+  <br>
+  <br>
+  <label class="control-label">Order by</label>
+  <select class="form-control" ng-model="selectedOrder" ng-options="option for option in order_by_options"></select>
   <p><input type="text" class="form-control" ng-model="test" placeholder="Search"></p><!-- get in line with Add?-->
-  <div class="col-lg-4 product-cell" dir-paginate="movie in movies | filter : test |itemsPerPage:6">
+
+  <div class="col-sm-4 product-cell" dir-paginate="movie in movies | filter : test | orderBy:selectedOrder |itemsPerPage:6">
     <div class="thumbnail">
-      <img ng-src="[[movie.image]]" alt="Smiley face">
+      <img ng-src="[[movie.image]]" alt="[[movie.title]] image" style="height:130px">
       <div class="caption">
         <h3>[[movie.title]]</h3>
         <p>
-            <a href="#/movies/[[movie.id]]/view" class="btn btn-small btn-primary">Read more</a> 
-            <a class="btn btn-danger"  ng-click="deleteMovie(movie)">Delete</a></p>
+            <a class="btn btn-small btn-info" href="#/movies/[[movie.id]]/view" >Read more</a>
+            <a class="btn btn-danger" ng-click="deleteMovie(movie)">Delete</a>
+        </p>
       </div>
     </div>
   </div>

@@ -2,34 +2,33 @@
 <!DOCTYPE html>
 <html data-ng-app="movieApp">
   <head lang="en">
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <base href="/"/> <!-- default url for all links on the page -->
-    <title>The Movie App</title>
+    <title>The Movie Gallery</title>
     <link rel="stylesheet" type="text/css" href="{% static 'movies/lib/bootstrap-3.3.6-dist/css/bootstrap.min.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'movies/css/app.css' %}"/>
   </head>
   <body>
-  <div class="container">
-    <div class="header">
-      <ul class="nav nav-pills pull-right" ng-controller="NavigationCtrl">
-        <li ng-class="{active:isCurrentPath('/movies')}"><a href="#/movies">Movies</a></li>
-        <li ng-class="{active:isCurrentPath('/about')}"><a href="#/about">About</a></li>
-      </ul>
-      <h3 class="text-muted">Movie Gallery</h3>
+    <div class="container">
+      <div class="header">
+        <ul class="nav nav-tabs pull-right" ng-controller="NavigationCtrl">
+          <li ng-class="{active:isCurrentPath('/movies')}"><a href="#/movies">Movies</a></li>
+          <li ng-class="{active:isCurrentPath('/about')}"><a href="#/about">About</a></li>
+        </ul>
+        <h3 class="text-muted">Movie Gallery</h3>
+      </div>
+      <div ui-view></div>
+      <div class="footer">
+        <p>Movie Gallery 2016</p>
+      </div>
     </div>
-    <div ui-view></div>
-    <div class="footer">
-      <p>Movie Gallery 2016</p>
-    </div>
-  </div>
 
-    <script src="{% static 'movies/lib/angular.min.js' %}"></script> <!-- get most recent angular -->
+    <script src="{% static 'movies/lib/angular.min.js' %}"></script>
     <script src="{% static 'movies/js/app.js' %}"></script>
     <script src="{% static 'movies/js/controllers.js' %}"></script>
     <script src="{% static 'movies/js/services.js' %}"></script>
+    <script src="{% static 'movies/js/directives.js' %}"></script>
     <script src="{% static 'movies/lib/angular-ui-router.min.js' %}"></script>
     <script src="{% static 'movies/lib/angular-resource.min.js' %}"></script>
     <script src="{% static 'movies/lib/dirPagination.js' %}"></script>

@@ -4,9 +4,11 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
 
     $scope.movies = [];
 
-    $scope.order_by_options = ['title', 'year'];
+    $scope.order_by_options = ['title', 'release_year', 'rating'];
+    // Default order is by title
+    $scope.selectedOrder = 'title'
 
- // Ajax request to fetch data into movies
+    // Ajax request to fetch data into movies
     $http.get("/api/movies")  
                 .then(function successCallback(response) {
                         $scope.movies = response.data.results;

@@ -8,5 +8,12 @@ class MovieAdmin(admin.ModelAdmin):
     search_fields = ['title']
     list_display_links = ['title']
 
-admin.site.register(MovieGenre)
+
+class MovieGenreAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ['name']
+    list_display_links = ['name']
+    ordering = ('name',)
+
+admin.site.register(MovieGenre, MovieGenreAdmin)
 admin.site.register(Movie, MovieAdmin)

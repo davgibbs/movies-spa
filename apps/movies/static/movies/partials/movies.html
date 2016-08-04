@@ -3,16 +3,16 @@
   <br>
   <br>
   <select class="form-control" ng-model="selectedOrder" ng-options="option.name for option in order_by_options track by option.id"></select>
-  <p><input type="text" class="form-control" ng-model="test" placeholder="Search"></p><!-- get in line with Add?-->
+  <p><input type="text" class="form-control" ng-model="test" placeholder="Search"></p>
 
-  <div class="col-sm-4 product-cell" dir-paginate="movie in movies | filter : test | orderBy:selectedOrder.id |itemsPerPage:6">
+  <div class="col-sm-4 movie-cell" dir-paginate="movie in movies | filter : test | orderBy:selectedOrder.id | itemsPerPage:6">
     <div class="thumbnail">
       <img ng-src="[[movie.image]]" alt="[[movie.title]] image" style="height:130px">
       <div class="caption">
         <h3>[[movie.title]] ([[movie.release_year]])</h3>
         <p><span uib-rating ng-model="movie.rating" read-only="true" aria-labelledby="default-rating" for="movie-rating"></span></p>
         <p>
-            <a class="btn btn-small btn-info" href="#/movies/[[movie.id]]/view" >Read more</a>
+            <a class="btn btn-small btn-info" ui-sref="viewMovie({id:movie.id})" >Read more</a>
             <a class="btn btn-danger" ng-click="deleteMovie(movie)">Delete</a>
         </p>
       </div>

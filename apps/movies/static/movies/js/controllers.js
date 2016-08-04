@@ -9,7 +9,7 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
                                {name: 'Lowest Rating', id: 'rating'},
                                {name: 'Highest Rating', id: '-rating'},
                                {name: 'Oldest Release', id: 'release_year'},
-                               {name: 'Newest Release', id: '-release_year'}]
+                               {name: 'Newest Release', id: '-release_year'}];
     // Default order is by title
     $scope.selectedOrder = {id: 'title'};
 
@@ -61,6 +61,7 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
             fd.append('director', $scope.movie.director);
             fd.append('release_year', $scope.movie.release_year);
             fd.append('title', $scope.movie.title);
+            fd.append('summary', $scope.movie.summary);
             fd.append('genre', $scope.movie.genre);
             fd.append('rating', $scope.movie.rating);
 
@@ -96,6 +97,7 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
             fd.append('director', $scope.movie.director);
             fd.append('release_year', $scope.movie.release_year);
             fd.append('title', $scope.movie.title);
+            fd.append('summary', $scope.movie.summary);
             fd.append('genre', $scope.movie.genre);
             fd.append('rating', $scope.movie.rating);
 

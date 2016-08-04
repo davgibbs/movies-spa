@@ -27,7 +27,6 @@ class Movie(models.Model):
     image = models.ImageField(upload_to='movies/', default='movies/Movie.jpg')
     rating = models.PositiveIntegerField(validators=[MaxValueValidator(5)], default=3)
 
-
     def __unicode__(self):
         return self.title
 

@@ -5,5 +5,7 @@ The website is a Single Page Application that allows the user to add, edit and d
 
 Most of the Movie information was taken from http://www.imdb.com
 
+![Movies Gallery](https://github.com/davgibbs/movies-spa/apps/movies/static/movies/images/movies_list.png)
+
 ## Developer Information
 Need a virtualenv set up with requirement.txt dependencies installed. Then as with all Django projects, run the "migrate" command to create the database. After the "runserver" to see the base page. When developing it may be useful to run "gulp" in the root directory to re-fresh the page when and changes to static files are made. All AngularJS code is in the Django "static" directory.

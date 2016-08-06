@@ -5,10 +5,6 @@ from .serializers import MovieGenreSerializer, MovieSerializer
 from .models import Movie, MovieGenre
 
 
-def index(request):
-    return render(request, "movies/index.html", {})
-
-
 class MovieViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows movie to be viewed or edited.

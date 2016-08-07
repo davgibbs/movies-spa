@@ -14,13 +14,12 @@ angular.module('movieApp.controllers',['angularUtils.directives.dirPagination'])
     $scope.selectedOrder = {id: 'title'};
 
     // Ajax request to fetch data into movies
-    $http.get("/api/movies")  
-                .then(function successCallback(response) {
-                        $scope.movies = response.data.results;
-                  }, function errorCallback(response) {
-                    console.log(response.data);
-                    console.log('error getting all');
-                  });
+    $http.get("/api/movies").then(
+        function successCallback(response) {
+            $scope.movies = response.data.results;
+        }, function errorCallback(response) {
+            console.log('Error getting movies: ' + response.data);
+        });
 
     $scope.deleteMovie=function(movie){
         if(popupService.showPopup('Really delete this?')){

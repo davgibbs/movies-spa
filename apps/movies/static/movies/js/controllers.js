@@ -8,19 +8,19 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         type: 'Title A-Z',
         id: 'title'
     }, {
-        name: 'Title Z-A',
+        type: 'Title Z-A',
         id: '-title'
     }, {
-        name: 'Lowest Rating',
+        type: 'Lowest Rating',
         id: 'rating'
     }, {
-        name: 'Highest Rating',
+        type: 'Highest Rating',
         id: '-rating'
     }, {
-        name: 'Oldest Release',
+        type: 'Oldest Release',
         id: 'release_year'
     }, {
-        name: 'Newest Release',
+        type: 'Newest Release',
         id: '-release_year'
     }];
     // Default order is by title

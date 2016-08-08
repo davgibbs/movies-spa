@@ -59,25 +59,34 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
     $scope.movie = new Movie();
 
+    // Default release year
+    $scope.movie.release_year = 2016;
+
     $scope.genres = [];
     $http.get("/api/movies-genres")
         .then(function successCallback(response) {
             $scope.genres = response.data.results;
+
+            // Set the default genre as the first returned
+            $scope.movie.genre = response.data.results[0].id;
         }, function errorCallback(response) {
-            console.log(response.data);
-            console.log('error getting all');
+            console.log('Error getting all movie genres: ' + response.data);
         });
 
     $scope.addMovie = function() {
-        var file = $scope.movie.myFile;
+
+        var file = ($scope.movie.myFile === undefined ? '' : $scope.movie.myFile);
+        var director = ($scope.movie.director === undefined ? '' : $scope.movie.director);
+        var summary = ($scope.movie.summary === undefined ? '' : $scope.movie.summary);
+
         var uploadUrl = "/api/movies";
 
         var fd = new FormData();
         fd.append('image', file);
-        fd.append('director', $scope.movie.director);
+        fd.append('director', director);
         fd.append('release_year', $scope.movie.release_year);
         fd.append('title', $scope.movie.title);
-        fd.append('summary', $scope.movie.summary);
+        fd.append('summary', summary);
         fd.append('genre', $scope.movie.genre);
         fd.append('rating', $scope.movie.rating);
 
@@ -91,7 +100,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                 id: response.data.id
             });
         }, function errorCallback(response) {
-            console.log('Error adding movie' + response.data);
+            console.log('Error adding movie: ' + response.data);
         });
 
     };
@@ -99,20 +108,19 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 }).controller('MovieEditController', function($scope, $state, $stateParams, Movie, $http) {
 
     $scope.updateMovie = function() {
-        var file;
-        if ($scope.movie.myFile === undefined) {
-            file = '';
-        } else {
-            file = $scope.movie.myFile;
-        } // todo use the short hand of else in javascript ?:...
+
+        var file = ($scope.movie.myFile === undefined ? '' : $scope.movie.myFile);
+        var director = ($scope.movie.director === undefined ? '' : $scope.movie.director);
+        var summary = ($scope.movie.summary === undefined ? '' : $scope.movie.summary);
+
         var uploadUrl = "/api/movies/" + $scope.movie.id;
 
         var fd = new FormData();
         fd.append('image', file);
-        fd.append('director', $scope.movie.director);
+        fd.append('director', director);
         fd.append('release_year', $scope.movie.release_year);
         fd.append('title', $scope.movie.title);
-        fd.append('summary', $scope.movie.summary);
+        fd.append('summary', summary);
         fd.append('genre', $scope.movie.genre);
         fd.append('rating', $scope.movie.rating);
 

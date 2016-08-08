@@ -123,12 +123,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-#     'PAGE_SIZE': 10
-# }
-# Anything bigger than page size will not be returned from server. Is this ok?
-# For speed on a small site, it is okay for the moment
+# Note: Anything bigger than page size will not be returned from server.
 REST_FRAMEWORK = {
     'PAGE_SIZE': 100
 }

@@ -20,10 +20,10 @@ class Movie(models.Model):
     """ Movie Information """
     title = models.CharField(max_length=100, unique=True)
     created_date = models.DateTimeField(auto_now_add=True)
-    summary = models.TextField(max_length=400, default='')
-    release_year = models.PositiveIntegerField()
-    director = models.CharField(max_length=100)
-    genre = models.ForeignKey(MovieGenre, verbose_name='Movie Genre', related_name='movie_genre')
+    summary = models.TextField(max_length=400, blank=True, default='')
+    release_year = models.PositiveIntegerField(default=2016)
+    director = models.CharField(max_length=100, blank=True, default='')
+    genre = models.ForeignKey(MovieGenre, related_name='movie_genre', default=1)
     image = models.ImageField(upload_to='movies/', default='movies/Movie.jpg')
     rating = models.PositiveIntegerField(validators=[MaxValueValidator(5)], default=3)
 

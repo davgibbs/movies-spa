@@ -4,7 +4,7 @@ from .models import MovieGenre, Movie
 
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('title', 'summary', 'director', 'release_year', 'genre', 'image', 'rating', 'created_date')
+    list_display = ('title', 'director', 'release_year', 'genre', 'image', 'rating', 'created_date')
     search_fields = ['title']
     list_display_links = ['title']
 

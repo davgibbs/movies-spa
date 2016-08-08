@@ -23,7 +23,3 @@ gulp.task('default', ['lint'], function() {
 });
 
 // https://dezoito.github.io/2016/01/06/django-automate-browsersync.html
-
-
-
-

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']).controller('MovieListController', function($scope, $state, popupService, $window, Movie, $http) {
+angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']).controller('MovieListController', function($scope, $state, popupService, $window, $http) {
 
     $scope.movies = [];
 
@@ -49,18 +49,20 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         }
     };
 
-}).controller('MovieViewController', function($scope, $stateParams, Movie) {
+}).controller('MovieViewController', function($scope, $stateParams, $http) {
 
-    $scope.movie = Movie.get({
-        id: $stateParams.id
-    });
+    $http.get("/api/movies/" + $stateParams.id )
+        .then(function successCallback(response) {
+            $scope.movie = response.data;
+        });
 
-}).controller('MovieCreateController', function($scope, $state, $stateParams, Movie, $http) {
+}).controller('MovieCreateController', function($scope, $state, $stateParams, $http) {
 
-    $scope.movie = new Movie();
+    $scope.movie = {};
 
-    // Default release year
+    // Default values
     $scope.movie.release_year = 2016;
+    $scope.movie.rating = 3;
 
     $scope.genres = [];
     $http.get("/api/movies-genres")
@@ -105,7 +107,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
     };
 
-}).controller('MovieEditController', function($scope, $state, $stateParams, Movie, $http) {
+}).controller('MovieEditController', function($scope, $state, $stateParams, $http) {
 
     $scope.updateMovie = function() {
 
@@ -147,9 +149,10 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         });
 
     $scope.loadMovie = function() {
-        $scope.movie = Movie.get({
-            id: $stateParams.id
-        });
+        $http.get("/api/movies/" + $stateParams.id )
+            .then(function successCallback(response) {
+                $scope.movie = response.data;
+            });
     };
 
     $scope.loadMovie();
@@ -162,7 +165,6 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
     };
 
 }).controller('RatingDemoCtrl', function($scope) {
-    $scope.movie.rating = 3;
     $scope.max = 5;
     $scope.isReadonly = false;
 

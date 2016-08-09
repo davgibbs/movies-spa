@@ -2,7 +2,7 @@ language: python
 node_js:
   - "0.10.25"
 before_install:
-  - npm install -g jshint csslint phantomjs-prebuilt node-qunit-phantomjs js-beautify
+  - npm install -g jshint csslint phantomjs-prebuilt node-qunit-phantomjs js-beautify jasmine-node
 python:
   - "2.7"
 # command to install dependencies
@@ -15,3 +15,4 @@ script:
   - phantomjs -v
   - node-qunit-phantomjs apps/movies/static/movies/test/test.html --verbose
   - js-beautify -r apps/movies/static/movies/js/*.js
+  - jasmine-node apps/movies/static/movies/test/spec/

@@ -12,6 +12,9 @@ script:
   - flake8 apps/
   - jshint apps/movies/static/movies/js/
   - csslint apps/movies/static/movies/css/app.css
+  - css-beautify -r apps/movies/static/movies/css/app.css
+  - html-beautify -r apps/movies/static/movies/templates/*.html
+  - html-beautify -r apps/movies/static/movies/partials/*.html
   - phantomjs -v
   - node-qunit-phantomjs apps/movies/static/movies/test/test.html --verbose
   - js-beautify -r apps/movies/static/movies/js/*.js

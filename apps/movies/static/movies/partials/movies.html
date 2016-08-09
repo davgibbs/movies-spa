@@ -1,25 +1,24 @@
 <div class="centre_text">
-  <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Movie</a>
-  <br>
-  <br>
-  <select class="form-control" ng-model="selectedOrder" ng-options="option.type for option in order_by_options track by option.id"></select>
-  <p><input type="text" class="form-control" ng-model="searchText" placeholder="Search"></p>
+    <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Movie</a>
+    <br>
+    <br>
+    <select class="form-control" ng-model="selectedOrder" ng-options="option.type for option in order_by_options track by option.id"></select>
+    <p><input type="text" class="form-control" ng-model="searchText" placeholder="Search"></p>
 
-  <div class="col-sm-4 movie-cell" dir-paginate="movie in movies | filter: searchText | orderBy: selectedOrder.id | itemsPerPage:6">
-    <div class="thumbnail">
-      <img ng-src="[[movie.image]]" alt="[[movie.title]] image" style="height:150px">
-      <div class="caption">
-        <h3>[[movie.title]] ([[movie.release_year]])</h3>
-        <p><span uib-rating ng-model="movie.rating" read-only="true" aria-labelledby="default-rating" for="movie-rating"></span></p>
-        <p>
-            <a class="btn btn-small btn-info" ui-sref="viewMovie({id:movie.id})" >Read more</a>
-            <a class="btn btn-danger" ng-click="deleteMovie(movie)">Delete</a>
-        </p>
-      </div>
+    <div class="col-sm-4 movie-cell" dir-paginate="movie in movies | filter: searchText | orderBy: selectedOrder.id | itemsPerPage:6">
+        <div class="thumbnail">
+            <img ng-src="[[movie.image]]" alt="[[movie.title]] image" style="height:150px">
+            <div class="caption">
+                <h3>[[movie.title]] ([[movie.release_year]])</h3>
+                <p><span uib-rating ng-model="movie.rating" read-only="true" aria-labelledby="default-rating" for="movie-rating"></span></p>
+                <p>
+                    <a class="btn btn-small btn-info" ui-sref="viewMovie({id:movie.id})">Read more</a>
+                    <a class="btn btn-danger" ng-click="deleteMovie(movie)">Delete</a>
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <div class="centre_text">
-    <dir-pagination-controls max-size="6" direction-links="false" boundary-links="true" ></dir-pagination-controls>
-<div>
-
+    <dir-pagination-controls max-size="6" direction-links="false" boundary-links="true"></dir-pagination-controls>
+    <div>

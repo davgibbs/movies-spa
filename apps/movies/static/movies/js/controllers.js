@@ -51,7 +51,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
 }).controller('MovieViewController', function($scope, $stateParams, $http) {
 
-    $http.get("/api/movies/" + $stateParams.id )
+    $http.get("/api/movies/" + $stateParams.id)
         .then(function successCallback(response) {
             $scope.movie = response.data;
         });
@@ -149,7 +149,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         });
 
     $scope.loadMovie = function() {
-        $http.get("/api/movies/" + $stateParams.id )
+        $http.get("/api/movies/" + $stateParams.id)
             .then(function successCallback(response) {
                 $scope.movie = response.data;
             });

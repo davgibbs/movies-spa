@@ -1,24 +1,23 @@
-.top-buffer{
-    margin-top:10px;
+.top-buffer {
+    margin-top: 10px;
 }
 
-.movietable tr td:nth-child(2){
+.movietable tr td:nth-child(2) {
     width: 150px;
 }
 
-.movietable tr:nth-child(1) td{
+.movietable tr:nth-child(1) td {
     border-top: none;
 }
 
-.nodecoration{
-    text-decoration:none;
+.nodecoration {
+    text-decoration: none;
 }
 
-.centre_text{
+.centre_text {
     clear: both;
     text-align: center;
 }
-
 
 body {
     padding-bottom: 20px;
@@ -26,28 +25,28 @@ body {
 }
 
 .header {
-  border-bottom: 1px solid #e5e5e5;
-  margin-bottom: 30px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 30px;
 }
 
 h3 {
-  height: 75px;
-  line-height: 35px;
-  margin-bottom: 0;
-  margin-top: 0;
+    height: 75px;
+    line-height: 35px;
+    margin-bottom: 0;
+    margin-top: 0;
 }
 
 .jumbotron {
-  text-align: center;
+    text-align: center;
 }
 
 .movie-cell {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .footer {
-  border-top: 1px solid #e5e5e5;
-  color: #777777;
-  margin-top: 30px;
-  padding-top: 19px;
+    border-top: 1px solid #e5e5e5;
+    color: #777777;
+    margin-top: 30px;
+    padding-top: 19px;
 }

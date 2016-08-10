@@ -23,7 +23,7 @@ describe('MovieViewController Tests', function() {
             .respond(200, { 'title': 'superman', 'director': 'James Cameron'});
     }));
 
-    it("says hello", function() {
+    it("get is correct", function() {
         var stateParams = {id: 1}
 
         controller('MovieViewController', {

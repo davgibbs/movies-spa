@@ -39,7 +39,7 @@
 </div>
 <div class="form-group">
     <label for="movie-rating" class="col-sm-2 control-label">Movie Rating</label>
-    <div class="col-sm-10" ng-controller="RatingDemoCtrl">
+    <div class="col-sm-10" ng-controller="RatingController">
         <div>
             <span uib-rating ng-model="movie.rating" max="max" read-only="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null" titles="['one','two','three']" aria-labelledby="default-rating" id="movie-rating"></span>
             <span class="label" ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}" ng-show="overStar && !isReadonly">[[percent]]%</span>

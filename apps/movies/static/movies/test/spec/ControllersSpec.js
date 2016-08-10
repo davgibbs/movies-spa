@@ -56,12 +56,10 @@ describe('MovieListController Tests', function() {
     }));
 
     it("get all is correct", function() {
-        var state = {}
         var mypopupService, window;
 
         controller('MovieListController', {
             $scope: scope,
-            $state: state,
             popupService: mypopupService,
             $window: window,
             $httpBackend: $httpBackend,

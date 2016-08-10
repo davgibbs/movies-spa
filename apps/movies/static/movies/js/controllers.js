@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination'])
-.controller('MovieListController', function($scope, $state, popupService, $window, $http) {
+.controller('MovieListController', function($scope, popupService, $http, $window) {
 
     $scope.movies = [];
 
@@ -33,19 +33,13 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
     $http.get("/api/movies").then(
         function successCallback(response) {
             $scope.movies = response.data.results;
-        },
-        function errorCallback(response) {
-            console.log('Error getting movies: ' + response.data);
         });
 
     $scope.deleteMovie = function(movie) {
         if (popupService.showPopup('Really delete this?')) {
             $http.delete("/api/movies/" + movie.id)
                 .then(function successCallback(response) {
-                    $window.location.href = '';
-                }, function errorCallback(response) {
-                    console.log('Error deleting movie: ' + response.data);
-                    $window.location.href = '';
+                    $window.location.href = ''; //redirect to home
                 });
         }
     };
@@ -72,8 +66,6 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
             // Set the default genre as the first returned
             $scope.movie.genre = response.data.results[0].id;
-        }, function errorCallback(response) {
-            console.log('Error getting all movie genres: ' + response.data);
         });
 
     $scope.addMovie = function() {
@@ -102,8 +94,6 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $state.go('viewMovie', {
                 id: response.data.id
             });
-        }, function errorCallback(response) {
-            console.log('Error adding movie: ' + response.data);
         });
 
     };
@@ -137,8 +127,6 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                 $state.go('viewMovie', {
                     id: $scope.movie.id
                 });
-            }, function errorCallback(response) {
-                console.log('Error updating movie: ' + response.data);
             });
 
     };
@@ -165,7 +153,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         return ($location.path().substr(0, path.length) == path);
     };
 
-}).controller('RatingDemoCtrl', function($scope) {
+}).controller('RatingController', function($scope) {
     $scope.max = 5;
     $scope.isReadonly = false;
 

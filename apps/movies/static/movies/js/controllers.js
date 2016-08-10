@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']).controller('MovieListController', function($scope, $state, popupService, $window, $http) {
+angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination'])
+.controller('MovieListController', function($scope, $state, popupService, $window, $http) {
 
     $scope.movies = [];
 

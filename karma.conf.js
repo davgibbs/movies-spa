@@ -44,7 +44,8 @@ module.exports = function(config) {
     plugins : [
         'karma-chrome-launcher',
         'karma-firefox-launcher',
-        'karma-jasmine'
+        'karma-jasmine',
+        'karma-phantomjs-launcher'
     ],
 
     // test results reporter to use

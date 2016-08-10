@@ -2,7 +2,7 @@ language: python
 node_js:
   - "0.10.25"
 before_install:
-  - npm install -g jshint csslint phantomjs-prebuilt node-qunit-phantomjs js-beautify jasmine-node karma jasmine karma-jasmine
+  - npm install -g jshint csslint phantomjs-prebuilt node-qunit-phantomjs js-beautify jasmine-node karma jasmine karma-jasmine karma-firefox-launcher karma-chrome-launcher 
 python:
   - "2.7"
 # command to install dependencies

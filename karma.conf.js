@@ -17,6 +17,11 @@ module.exports = function(config) {
     files: [
       'apps/movies/static/movies/lib/angular.min.js',
       'apps/movies/static/movies/test/lib/angular-mocks.js',
+      'apps/movies/static/movies/lib/angular-ui-router.min.js',
+      'apps/movies/static/movies/lib/angular-resource.min.js',
+      'apps/movies/static/movies/lib/angular-animate.js',
+      'apps/movies/static/movies/lib/dirPagination.js',
+      'apps/movies/static/movies/lib/ui-bootstrap-tpls-2.0.0.js',
       'apps/movies/static/movies/js/app.js',
       'apps/movies/static/movies/js/services.js',
       'apps/movies/static/movies/js/directives.js',
@@ -61,7 +66,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Firefox'],
 
 
     // Continuous Integration mode

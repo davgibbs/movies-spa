@@ -8,33 +8,33 @@ describe("Hello world", function() {
 });
 
 
-//.controller('MovieViewController', function($scope, $stateParams, $http) {
-
-//    $http.get("/api/movies/" + $stateParams.id )
-//        .then(function successCallback(response) {
-//            $scope.movie = response.data;
-//        });
-
-//})
-
-
 describe('MovieViewController Tests', function() {
-    //var scope, $location, createController;
 
-    beforeEach(module('movieApp'));
-    beforeEach(module('movieApp.services'));
-    beforeEach(module('movieApp.controllers'));
+    beforeEach(angular.mock.module('movieApp.controllers'));
 
-    //var scope, $location, createController;
+    var scope, $httpBackend, controller;
 
-    var $scope;
-    beforeEach(inject(function ($rootScope) {
-        $scope = $rootScope.$new();
+    beforeEach(angular.mock.inject(function ($rootScope, _$httpBackend_, $controller) {
+        $httpBackend = _$httpBackend_;
+        scope = $rootScope.$new();
+        controller = $controller;
+        $httpBackend
+            .when('GET', '/api/movies/1')
+            .respond(200, { 'title': 'superman', 'director': 'James Cameron'});
     }));
 
+    it("says hello", function() {
+        var stateParams = {id: 1}
 
-  it("says hello", function() {
-    expect("Hello dworld!").toEqual("Hello dworld!");
+        controller('MovieViewController', {
+            $scope: scope,
+            $stateParams: stateParams,
+            $httpBackend: $httpBackend,
+        });
+
+    $httpBackend.flush();
+
+    expect(scope.movie).toEqual({ 'title': 'superman', 'director': 'James Cameron'});
   });
 
 });

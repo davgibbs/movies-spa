@@ -1,3 +1,6 @@
+'use strict';
+
+
 describe("Hello world", function() {
   it("says hello", function() {
     expect("Hello world!").toEqual("Hello world!");
@@ -16,35 +19,22 @@ describe("Hello world", function() {
 
 
 describe('MovieViewController Tests', function() {
+    //var scope, $location, createController;
 
     beforeEach(module('movieApp'));
+    beforeEach(module('movieApp.services'));
+    beforeEach(module('movieApp.controllers'));
 
-    var scope, httpBackend;
+    //var scope, $location, createController;
 
-        console.log('w');
-
-    beforeEach(inject(function($injector){
-        console.log('ss');
-        httpBackend = $injector.get('$httpBackend')
-        scope = $injector.get('$rootScope').$new()
+    var $scope;
+    beforeEach(inject(function ($rootScope) {
+        $scope = $rootScope.$new();
     }));
 
-    it('should return movie details', function(){
-        httpBackend.when('GET', '/api/movies/1')
-            .respond({'name': 'movie1'})
 
-        stateParams = {
-            id: 1
-        };
-
-        $controller('MovieViewController', {
-            $scope : scope,
-            $stateParams: stateParams,
-            $http : http
-        });
-
-        expect(scope.movie).toEqual({'name': 'movie1'});
-
-    });
+  it("says hello", function() {
+    expect("Hello dworld!").toEqual("Hello dworld!");
+  });
 
 });

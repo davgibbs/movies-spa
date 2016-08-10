@@ -40,6 +40,12 @@ module.exports = function(config) {
     preprocessors: {
     },
 
+    // list of karma plugins
+    plugins : [
+        'karma-chrome-launcher',
+        'karma-firefox-launcher',
+        'karma-jasmine'
+    ],
 
     // test results reporter to use
     // possible values: 'dots', 'progress'

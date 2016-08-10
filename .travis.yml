@@ -18,5 +18,4 @@ script:
   - phantomjs -v
   - node-qunit-phantomjs apps/movies/static/movies/test/test.html --verbose
   - js-beautify -r apps/movies/static/movies/js/*.js
-  - karma start --single-run 
-  - jasmine-node apps/movies/static/movies/test/spec/
+  - karma start --single-run

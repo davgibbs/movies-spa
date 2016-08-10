@@ -46,7 +46,7 @@ module.exports = function(config) {
         'karma-coverage',
         'karma-chrome-launcher',
         'karma-firefox-launcher',
-        'karma-jasmine'
+        'karma-jasmine',
         'karma-phantomjs-launcher'
     ],
 

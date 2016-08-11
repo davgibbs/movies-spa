@@ -25,7 +25,7 @@
             <tr>
                 <td>Movie Rating</td>
                 <td ng-controller="RatingController">
-                    <span uib-rating ng-model="movie.rating" read-only="true" aria-labelledby="default-rating" for="movie-rating"></span>
+                    <span uib-rating ng-model="movie.rating" read-only="true" aria-labelledby="default-rating" on-hover="hoveringOver(value)" for="movie-rating"></span>
                 </td>
             </tr>
             <tr>

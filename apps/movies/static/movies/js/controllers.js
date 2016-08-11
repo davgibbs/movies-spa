@@ -51,7 +51,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.movie = response.data;
         });
 
-}).controller('MovieCreateController', function($scope, $state, $stateParams, $http) {
+}).controller('MovieCreateController', function($scope, $state, $http) {
 
     $scope.movie = {};
 

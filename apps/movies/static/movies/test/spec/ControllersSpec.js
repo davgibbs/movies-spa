@@ -99,3 +99,40 @@ describe('RatingController Tests', function() {
   });
 
 });
+
+
+describe('MovieCreateController Tests', function() {
+
+    beforeEach(angular.mock.module('movieApp.controllers'));
+
+    var scope, state, $httpBackend, controller;
+
+    beforeEach(angular.mock.inject(function ($rootScope, _$httpBackend_, $controller) {
+        $httpBackend = _$httpBackend_;
+        scope = $rootScope.$new();
+        controller = $controller;
+        $httpBackend
+            .when('POST', '/api/movies')
+            .respond(200, 'success');
+
+        $httpBackend
+            .when('GET', '/api/movies-genres')
+            .respond(200, {'results': [{'name': 'Action', 'id': '1'}]});
+    }));
+
+    it("create movie is correct", function() {
+        controller('MovieCreateController', {
+            $scope: scope,
+            $state: state,
+            $httpBackend: $httpBackend,
+        });
+
+    $httpBackend.flush();
+
+    expect(scope.movie).toEqual({ release_year: 2016, rating: 3, genre: '1' });
+    expect(scope.genres).toEqual([{'name': 'Action', 'id': '1'}]);
+    $httpBackend.expectPOST('/api/movies');
+
+  });
+
+});

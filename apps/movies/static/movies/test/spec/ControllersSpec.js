@@ -75,3 +75,27 @@ describe('MovieListController Tests', function() {
   });
 
 });
+
+
+describe('RatingController Tests', function() {
+
+    beforeEach(angular.mock.module('movieApp.controllers'));
+
+    var scope, controller;
+
+    beforeEach(angular.mock.inject(function ($rootScope, $controller) {
+        scope = $rootScope.$new();
+        controller = $controller;
+    }));
+
+    it("get all is correct", function() {
+        controller('RatingController', {
+            $scope: scope
+        });
+
+    expect(scope.max).toEqual(5)
+    expect(scope.isReadonly).toEqual(false);
+
+  });
+
+});

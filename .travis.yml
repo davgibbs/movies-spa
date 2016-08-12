@@ -2,7 +2,7 @@ language: python
 node_js:
   - "0.10.25"
 before_install:
-  - npm install -g jshint csslint phantomjs-prebuilt node-qunit-phantomjs js-beautify jasmine-node karma jasmine karma-jasmine karma-firefox-launcher karma-chrome-launcher karma-phantomjs-launcher karma-coverage
+  - npm install -g jshint csslint phantomjs-prebuilt js-beautify jasmine-node karma jasmine karma-jasmine karma-firefox-launcher karma-chrome-launcher karma-phantomjs-launcher karma-coverage
 python:
   - "2.7"
 # command to install dependencies
@@ -16,6 +16,5 @@ script:
   - html-beautify -r apps/movies/templates/movies/index.html
   - html-beautify -r apps/movies/static/movies/partials/*.html
   - phantomjs -v
-  - node-qunit-phantomjs apps/movies/static/movies/test/test.html --verbose
   - js-beautify -r apps/movies/static/movies/js/*.js
   - karma start --single-run

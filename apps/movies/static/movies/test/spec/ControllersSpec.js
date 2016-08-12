@@ -140,11 +140,7 @@ describe('MovieCreateController Tests', function() {
         });
 
         spyOn(state, 'go');
-
-
         scope.addMovie()
-        //console.log(create_controller);
-        console.log(controller);
 
         $httpBackend.expectPOST('/api/movies');
         //$httpBackend.expectGET('/api/movies-genres');
@@ -155,7 +151,48 @@ describe('MovieCreateController Tests', function() {
         expect(scope.genres).toEqual([{'name': 'Action', 'id': '1'}]);
         expect(state.go).toHaveBeenCalledWith('viewMovie', {'id':'1'})
 
+  });
+});
 
+
+describe('NavigationController Tests', function() {
+
+    beforeEach(angular.mock.module('movieApp'));
+
+    var scope, $controller;
+
+    beforeEach(angular.mock.inject(function ($rootScope, _$controller_) {
+        scope = $rootScope.$new();
+        $controller = _$controller_;
+    }));
+
+
+    it("Nav is correct", function() {
+        var $location = {
+            path: function() {return '/movies/1';}
+        };
+        $controller('NavigationCtrl', {
+            $scope : scope,
+            $location: $location
+        });
+
+        var current_page = scope.isCurrentPath('/about');
+        expect(current_page).toEqual(false);
+        var current_page = scope.isCurrentPath('/movies');
+        expect(current_page).toEqual(true);
+
+        $location = {
+            path: function() {return '/about';}
+        };
+        $controller('NavigationCtrl', {
+            $scope : scope,
+            $location: $location
+        });
+
+        var current_page = scope.isCurrentPath('/about');
+        expect(current_page).toEqual(true);
+        var current_page = scope.isCurrentPath('/movies');
+        expect(current_page).toEqual(false);
   });
 
 });

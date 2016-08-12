@@ -36,7 +36,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             });
 
         $scope.deleteMovie = function(movie) {
-            if (popupService.showPopup('Really delete this?')) {
+            if (popupService.showPopup('Really delete "' + movie.title + ' (' + movie.release_year + ')"?')) {
                 $http.delete("/api/movies/" + movie.id)
                     .then(function successCallback(response) {
                         $window.location.href = ''; //redirect to home

@@ -28,7 +28,7 @@ describe('MovieViewController Tests', function() {
      $httpBackend.verifyNoOutstandingRequest();
    });
 
-    it("get is correct", function() {
+    it("get one is correct", function() {
         var stateParams = {id: 1}
 
         controller('MovieViewController', {
@@ -58,6 +58,10 @@ describe('MovieListController Tests', function() {
         $httpBackend
             .when('GET', '/api/movies')
             .respond(200, {'results': [{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]});
+
+        $httpBackend
+            .when('DELETE', '/api/movies/2')
+            .respond(200, {'results': 'success'});
     }));
 
    afterEach(function() {
@@ -75,13 +79,35 @@ describe('MovieListController Tests', function() {
             $httpBackend: $httpBackend,
         });
 
-    $httpBackend.flush();
+        $httpBackend.flush();
+
+        expect(scope.selectedOrder).toEqual({id: 'title'})
+        expect(scope.order_by_options).toEqual( [{type: 'Title A-Z', id: 'title'}, {type: 'Title Z-A', id: '-title'}, {type: 'Lowest Rating', id: 'rating'}, {type: 'Highest Rating', id: '-rating'}, {type: 'Oldest Release', id:'release_year'}, {type: 'Newest Release', id: '-release_year'}])
+
+        expect(scope.movies).toEqual([{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]);
+  });
 
 
-    expect(scope.selectedOrder).toEqual({id: 'title'})
-    expect(scope.order_by_options).toEqual( [{type: 'Title A-Z', id: 'title'}, {type: 'Title Z-A', id: '-title'}, {type: 'Lowest Rating', id: 'rating'}, {type: 'Highest Rating', id: '-rating'}, {type: 'Oldest Release', id:'release_year'}, {type: 'Newest Release', id: '-release_year'}])
+    it("delete is correct", function() {
+        var window = {'location': {'href': 'dd'}};
 
-    expect(scope.movies).toEqual([{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]);
+        var mypopupService = {showPopup : function(){return true;}}
+
+        controller('MovieListController', {
+            $scope: scope,
+            popupService: mypopupService,
+            $window: window,
+            $httpBackend: $httpBackend,
+        });
+
+
+        var movie = {'id': '2', 'title': 'Break Away', 'release_year': '2016'}
+        scope.deleteMovie(movie)
+
+        $httpBackend.expectDELETE('/api/movies/2');
+        $httpBackend.flush();
+        expect(window.location.href).toEqual('')
+
   });
 
 });
@@ -98,7 +124,7 @@ describe('RatingController Tests', function() {
         controller = $controller;
     }));
 
-    it("get all is correct", function() {
+    it("rating is correct", function() {
         controller('RatingController', {
             $scope: scope
         });

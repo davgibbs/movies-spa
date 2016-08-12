@@ -103,8 +103,12 @@ describe('RatingController Tests', function() {
             $scope: scope
         });
 
-    expect(scope.max).toEqual(5)
-    expect(scope.isReadonly).toEqual(false);
+        scope.hoveringOver(2)
+
+        expect(scope.max).toEqual(5)
+        expect(scope.isReadonly).toEqual(false);
+        expect(scope.overStar).toEqual(2)
+        expect(scope.percent).toEqual(40)
 
   });
 
@@ -181,7 +185,7 @@ describe('NavigationController Tests', function() {
         var current_page = scope.isCurrentPath('/movies');
         expect(current_page).toEqual(true);
 
-        $location = {
+        var $location = {
             path: function() {return '/about';}
         };
         $controller('NavigationCtrl', {
@@ -196,3 +200,56 @@ describe('NavigationController Tests', function() {
   });
 
 });
+
+
+
+describe('MovieEditController Tests', function() {
+
+    beforeEach(angular.mock.module('movieApp'));
+
+    var scope, $httpBackend, $controller;
+
+    beforeEach(angular.mock.inject(function ($rootScope, _$httpBackend_, _$controller_) {
+        $httpBackend = _$httpBackend_;
+        scope = $rootScope.$new();
+        scope.movie = {myFile: 'blah', director: 'me', summary: 'sum', id: '1'};
+        $controller = _$controller_;
+        $httpBackend
+            .when('PUT', '/api/movies/1')
+            .respond(200, {'id': '1'});
+
+        $httpBackend
+            .when('GET', '/api/movies-genres')
+            .respond(200, {'results': [{'name': 'Action', 'id': '1'}]});
+
+        $httpBackend
+            .when('GET', '/api/movies/1')
+            .respond(200, {'id': '1', 'name': 'mymovie'});
+    }));
+
+    it("create movie is correct", function() {
+        var state = {'go' : function (){}};
+        var stateParams = {id: 1}
+
+        var controller = $controller('MovieEditController', {
+            $scope: scope,
+            $state: state,
+            $stateParams: stateParams,
+            $httpBackend: $httpBackend,
+        });
+
+        spyOn(state, 'go');
+        scope.updateMovie()
+
+        $httpBackend.expectPUT('/api/movies/1');
+        //$httpBackend.expectGET('/api/movies-genres');
+        $httpBackend.flush();
+        //$httpBackend.flush();
+
+        expect(scope.movie).toEqual({ id: '1', name: 'mymovie' });
+        expect(scope.genres).toEqual([{'name': 'Action', 'id': '1'}]);
+        expect(state.go).toHaveBeenCalledWith('viewMovie', {'id':'1'})
+
+  });
+});
+

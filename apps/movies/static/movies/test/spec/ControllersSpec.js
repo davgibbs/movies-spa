@@ -23,6 +23,11 @@ describe('MovieViewController Tests', function() {
             .respond(200, { 'title': 'superman', 'director': 'James Cameron'});
     }));
 
+   afterEach(function() {
+     $httpBackend.verifyNoOutstandingExpectation();
+     $httpBackend.verifyNoOutstandingRequest();
+   });
+
     it("get is correct", function() {
         var stateParams = {id: 1}
 
@@ -54,6 +59,11 @@ describe('MovieListController Tests', function() {
             .when('GET', '/api/movies')
             .respond(200, {'results': [{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]});
     }));
+
+   afterEach(function() {
+     $httpBackend.verifyNoOutstandingExpectation();
+     $httpBackend.verifyNoOutstandingRequest();
+   });
 
     it("get all is correct", function() {
         var mypopupService, window;
@@ -103,17 +113,17 @@ describe('RatingController Tests', function() {
 
 describe('MovieCreateController Tests', function() {
 
-    beforeEach(angular.mock.module('movieApp.controllers'));
+    beforeEach(angular.mock.module('movieApp'));
 
-    var scope, state, $httpBackend, controller;
+    var scope, $httpBackend, $controller;
 
-    beforeEach(angular.mock.inject(function ($rootScope, _$httpBackend_, $controller) {
+    beforeEach(angular.mock.inject(function ($rootScope, _$httpBackend_, _$controller_) {
         $httpBackend = _$httpBackend_;
         scope = $rootScope.$new();
-        controller = $controller;
+        $controller = _$controller_;
         $httpBackend
             .when('POST', '/api/movies')
-            .respond(200, 'success');
+            .respond(200, {'id': '1'});
 
         $httpBackend
             .when('GET', '/api/movies-genres')
@@ -121,17 +131,30 @@ describe('MovieCreateController Tests', function() {
     }));
 
     it("create movie is correct", function() {
-        controller('MovieCreateController', {
+        var state = {'go' : function (){}};
+
+        var controller = $controller('MovieCreateController', {
             $scope: scope,
             $state: state,
             $httpBackend: $httpBackend,
         });
 
-    $httpBackend.flush();
+        spyOn(state, 'go');
 
-    expect(scope.movie).toEqual({ release_year: 2016, rating: 3, genre: '1' });
-    expect(scope.genres).toEqual([{'name': 'Action', 'id': '1'}]);
-    $httpBackend.expectPOST('/api/movies');
+
+        scope.addMovie()
+        //console.log(create_controller);
+        console.log(controller);
+
+        $httpBackend.expectPOST('/api/movies');
+        //$httpBackend.expectGET('/api/movies-genres');
+        $httpBackend.flush();
+        //$httpBackend.flush();
+
+        expect(scope.movie).toEqual({ release_year: 2016, rating: 3, genre: '1' });
+        expect(scope.genres).toEqual([{'name': 'Action', 'id': '1'}]);
+        expect(state.go).toHaveBeenCalledWith('viewMovie', {'id':'1'})
+
 
   });
 

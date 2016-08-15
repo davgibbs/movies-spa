@@ -74,8 +74,6 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             var director = ($scope.movie.director === undefined ? '' : $scope.movie.director);
             var summary = ($scope.movie.summary === undefined ? '' : $scope.movie.summary);
 
-            var uploadUrl = "/api/movies";
-
             var fd = new FormData();
             fd.append('image', file);
             fd.append('director', director);
@@ -85,7 +83,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             fd.append('genre', $scope.movie.genre);
             fd.append('rating', $scope.movie.rating);
 
-            $http.post(uploadUrl, fd, {
+            $http.post("/api/movies", fd, {
                 transformRequest: angular.identity,
                 headers: {
                     'Content-Type': undefined
@@ -106,8 +104,6 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             var director = ($scope.movie.director === undefined ? '' : $scope.movie.director);
             var summary = ($scope.movie.summary === undefined ? '' : $scope.movie.summary);
 
-            var uploadUrl = "/api/movies/" + $scope.movie.id;
-
             var fd = new FormData();
             fd.append('image', file);
             fd.append('director', director);
@@ -117,7 +113,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             fd.append('genre', $scope.movie.genre);
             fd.append('rating', $scope.movie.rating);
 
-            $http.put(uploadUrl, fd, {
+            $http.put("/api/movies/" + $scope.movie.id, fd, {
                     transformRequest: angular.identity,
                     headers: {
                         'Content-Type': undefined

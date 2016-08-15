@@ -12,7 +12,7 @@
                 <h3>[[movie.title]] ([[movie.release_year]])</h3>
                 <p><span uib-rating ng-model="movie.rating" read-only="true" aria-labelledby="default-rating" for="movie-rating"></span></p>
                 <p>
-                    <a class="btn btn-small btn-info" ui-sref="viewMovie({id:movie.id})">Read more</a>
+                    <a class="btn btn-small btn-info" href="#/movies/[[movie.id]]/view">Read more</a>
                     <a class="btn btn-danger" ng-click="deleteMovie(movie)">Delete</a>
                 </p>
             </div>

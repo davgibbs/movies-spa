@@ -3,28 +3,30 @@
 
 describe('PopupService Tests', function(){
 
-    beforeEach(angular.mock.module('movieApp.services'));
+    beforeEach(angular.mock.module('movieApp.services', 
+        // mock the window dependency
+        function ($provide) {
+            $provide.factory('$window', function () {
+                var windowmock = jasmine.createSpy('$window');
+                windowmock.confirm = function(){return true;}
+                return windowmock
+            });
+            }
 
-    var _$window_ = {confirm : function(){return true;}}
-    var service;
+        ));
 
-    beforeEach(angular.mock.inject(function ($service, $window) {
-        service = $service,
-        $window = _$window_
+    var popupService;
+
+    beforeEach(angular.mock.inject(function (_popupService_) {
+        popupService = _popupService_
     }));
 
+    it('show popup true', function(){
 
+        expect(angular.isFunction(popupService.showPopup)).toBe(true);
+        var result = popupService.showPopup('hello');
+        expect(result).toBe(true);
 
-//    it('show popup', function(){
-
-//        service('popupService', {
-//            $window: window
-//        });
-
-//    var result = showPopup();
-
-
-//        expect(result).toEqual(true);
-//    })
+    })
 
 });

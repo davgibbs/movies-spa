@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('movieApp.directives', []).directive('fileModel', ['$parse', function($parse) {
+    // restict to Attribute values
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {

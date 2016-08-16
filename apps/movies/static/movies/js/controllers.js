@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination'])
-    .controller('MovieListController', function($scope, popupService, $http, $window) {
+    .controller('MovieListController', function($scope, popupService, $http) {
 
         $scope.movies = [];
 
@@ -30,16 +30,20 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         };
 
         // Ajax request to fetch data into movies
-        $http.get("/api/movies").then(
-            function successCallback(response) {
-                $scope.movies = response.data.results;
-            });
+        $scope.loadMovies = function() {
+            $http.get("/api/movies").then(
+                function successCallback(response) {
+                    $scope.movies = response.data.results;
+                });
+        };
+
+        $scope.loadMovies();
 
         $scope.deleteMovie = function(movie) {
             if (popupService.showPopup('Really delete "' + movie.title + ' (' + movie.release_year + ')"?')) {
                 $http.delete("/api/movies/" + movie.id)
                     .then(function successCallback(response) {
-                        $window.location.href = ''; //redirect to home
+                        $scope.loadMovies();
                     });
             }
         };

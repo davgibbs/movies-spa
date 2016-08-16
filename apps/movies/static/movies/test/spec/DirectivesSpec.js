@@ -1,7 +1,7 @@
 'use strict';
 
 
-describe('FileModel Tests', function(){
+describe('fileModel Tests', function(){
 
 
 });

@@ -3,9 +3,9 @@
     <br>
     <br>
     <select class="form-control" ng-model="selectedOrder" ng-options="option.type for option in order_by_options track by option.id"></select>
-    <p><input type="text" class="form-control" ng-model="searchText" placeholder="Search"></p>
+    <p><input type="text" class="form-control" ng-model="searchText" placeholder="Search by Title"></p>
 
-    <div class="col-sm-4 movie-cell" dir-paginate="movie in movies | filter: searchText | orderBy: selectedOrder.id | itemsPerPage:6">
+    <div class="col-sm-4 movie-cell" dir-paginate="movie in movies | filter:{title:searchText} | orderBy: selectedOrder.id | itemsPerPage:6">
         <div class="thumbnail">
             <img ng-src="[[movie.image]]" alt="[[movie.title]] image" style="height:150px">
             <div class="caption">
@@ -21,4 +21,4 @@
 </div>
 <div class="centre_text">
     <dir-pagination-controls max-size="6" direction-links="false" boundary-links="true"></dir-pagination-controls>
-    <div>
+<div>

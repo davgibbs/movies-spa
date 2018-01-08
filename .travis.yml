@@ -2,9 +2,10 @@ language: python
 node_js:
   - "0.10.25"
 before_install:
-  - npm install -g jshint csslint phantomjs-prebuilt js-beautify jasmine-node karma jasmine karma-jasmine karma-firefox-launcher karma-chrome-launcher karma-phantomjs-launcher karma-coverage
+  - npm install -g jshint csslint phantomjs-prebuilt js-beautify jasmine-node karma jasmine jasmine-core karma-jasmine karma-firefox-launcher karma-chrome-launcher karma-phantomjs-launcher karma-coverage
 python:
   - "2.7"
+  - "3.5"
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests

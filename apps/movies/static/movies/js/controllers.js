@@ -33,7 +33,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         $scope.loadMovies = function() {
             $http.get("/api/movies").then(
                 function successCallback(response) {
-                    $scope.movies = response.data.results;
+                    $scope.movies = response.data;
                 });
         };
 
@@ -66,10 +66,10 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         $scope.genres = [];
         $http.get("/api/movies-genres")
             .then(function successCallback(response) {
-                $scope.genres = response.data.results;
+                $scope.genres = response.data;
 
                 // Set the default genre as the first returned
-                $scope.movie.genre = response.data.results[0].id;
+                $scope.movie.genre = response.data[0].id;
             });
 
         $scope.addMovie = function() {

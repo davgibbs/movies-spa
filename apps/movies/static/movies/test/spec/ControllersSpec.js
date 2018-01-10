@@ -57,7 +57,7 @@ describe('MovieListController Tests', function() {
         controller = $controller;
         $httpBackend
             .when('GET', '/api/movies')
-            .respond(200, {'results': [{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]});
+            .respond([{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]);
 
         $httpBackend
             .when('DELETE', '/api/movies/2')
@@ -154,7 +154,7 @@ describe('MovieCreateController Tests', function() {
 
         $httpBackend
             .when('GET', '/api/movies-genres')
-            .respond(200, {'results': [{'name': 'Action', 'id': '1'}]});
+            .respond([{'name': 'Action', 'id': '1'}]);
     }));
 
     it("create movie is correct", function() {

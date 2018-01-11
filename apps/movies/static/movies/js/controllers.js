@@ -133,8 +133,8 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
         $scope.genres = [];
         $http.get("/api/movies-genres")
-            .success(function(data) {
-                $scope.genres = data.results;
+            .then(function successCallback(response) {
+                $scope.genres = response.data;
             });
 
         $scope.loadMovie = function() {

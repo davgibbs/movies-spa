@@ -243,7 +243,7 @@ describe('MovieEditController Tests', function() {
 
         $httpBackend
             .when('GET', '/api/movies-genres')
-            .respond(200, {'results': [{'name': 'Action', 'id': '1'}]});
+            .respond(200, [{'name': 'Action', 'id': '1'}]);
 
         $httpBackend
             .when('GET', '/api/movies/1')

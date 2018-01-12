@@ -35,6 +35,18 @@ class MovieTestCase(TestCase):
                                                       ('image', 'http://testserver/media/movies/Movie.jpg'),
                                                       ('rating', 3)])])
 
+    def test_add_movie(self):
+        client = APIClient()
+        # Note need to send form data below, not json
+        response = client.post('/api/movies', {'title': 'Lion King',
+                                               'summary': 'Lion Movie',
+                                               'release_year': '1994',
+                                               'rating': 2,
+                                               'director': 'Roger Allers'}, format='json')
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Movie.objects.all()), 1)
+
 
 class MovieGenreTestCase(TestCase):
 

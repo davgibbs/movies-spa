@@ -15,5 +15,6 @@ class MovieGenreAdmin(admin.ModelAdmin):
     list_display_links = ['name']
     ordering = ('name',)
 
+
 admin.site.register(MovieGenre, MovieGenreAdmin)
 admin.site.register(Movie, MovieAdmin)

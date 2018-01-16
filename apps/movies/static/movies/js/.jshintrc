@@ -6,6 +6,7 @@
         "jQuery": false,
         "angular": false,
         "console": false,
-        "FormData": false
+        "FormData": false,
+        "alert": false
     }
 }

@@ -127,6 +127,8 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                     $state.go('viewMovie', {
                         id: $scope.movie.id
                     });
+                }, function(response) {
+                    alert('Issue: ' + response.data.detail);
                 });
 
         };
@@ -161,4 +163,9 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.overStar = value;
             $scope.percent = 100 * (value / $scope.max);
         };
+    }).controller('UserViewController', function($scope, $http) {
+        $http.get("/api/current-user")
+            .then(function successCallback(response) {
+                $scope.userName = response.data.username;
+            });
     });

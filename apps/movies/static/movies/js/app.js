@@ -25,6 +25,10 @@ movieapp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $int
     }).state('about', {
         url: '/about',
         templateUrl: '/static/movies/partials/about.html'
+    }).state('login', {
+        url: '/login',
+        templateUrl: '/static/movies/partials/login.html',
+        controller: 'LoginController'
     });
 
     // For any unmatched url, redirect to /movies

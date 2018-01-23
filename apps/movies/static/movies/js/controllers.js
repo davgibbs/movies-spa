@@ -168,4 +168,19 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             .then(function successCallback(response) {
                 $scope.userName = response.data.username;
             });
+    }).controller('LoginController', function($scope, $http) {
+        $scope.loginUser = function() {
+            console.log('logme in');
+
+            /*$http.post("/api/movies", fd, {
+                transformRequest: angular.identity,
+                headers: {
+                    'Content-Type': undefined
+                }
+            }).then(function successCallback(response) {
+                $state.go('viewMovie', {
+                    id: response.data.id
+                });
+            });*/
+        }
     });

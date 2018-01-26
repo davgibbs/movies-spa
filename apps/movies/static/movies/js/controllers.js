@@ -164,23 +164,29 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.percent = 100 * (value / $scope.max);
         };
     }).controller('UserViewController', function($scope, $http) {
+        
         $http.get("/api/current-user")
             .then(function successCallback(response) {
                 $scope.userName = response.data.username;
             });
-    }).controller('LoginController', function($scope, $http) {
-        $scope.loginUser = function() {
-            console.log('logme in');
 
-            /*$http.post("/api/movies", fd, {
-                transformRequest: angular.identity,
-                headers: {
-                    'Content-Type': undefined
-                }
-            }).then(function successCallback(response) {
-                $state.go('viewMovie', {
-                    id: response.data.id
+    }).controller('LoginController', function($scope, $rootScope, AuthService) {
+        $scope.credentials = {
+            username: '',
+            password: ''
+        };
+
+        $scope.login = function (credentials) {
+            console.log('logme in');
+            AuthService.login(credentials)
+                .then(function successCallback (user) {
+                    console.log('ss')
+                    //$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    //$scope.setCurrentUser(user);
+                }, function errorCallback () {
+                    console.log('sed')
+                    //$rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                 });
-            });*/
-        }
+        };
+
     });

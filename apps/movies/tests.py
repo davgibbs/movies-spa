@@ -59,3 +59,9 @@ class MovieGenreTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [OrderedDict([('id', 1), ('name', 'Comedy')])])
         movie_genre.delete()
+
+
+# class UserLoginTestCase(TestCase):
+#
+#     def test_user_login(self):
+#         admin:password123

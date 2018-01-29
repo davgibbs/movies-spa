@@ -170,22 +170,28 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                 $scope.userName = response.data.username;
             });
 
-    }).controller('LoginController', function($scope, $rootScope, AuthService) {
+    }).controller('LoginController', function($scope, $rootScope, AUTH_EVENTS, AuthService) {
         $scope.credentials = {
             username: '',
             password: ''
         };
+        $scope.loginError = '';
 
         $scope.login = function (credentials) {
             console.log('logme in');
+            $scope.loginError = '';
             AuthService.login(credentials)
                 .then(function successCallback (user) {
                     console.log('ss')
-                    //$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    console.log(AUTH_EVENTS.loginSuccess)
                     //$scope.setCurrentUser(user);
-                }, function errorCallback () {
+                }, function errorCallback (message) {
                     console.log('sed')
-                    //$rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                    console.log(message)
+                    $scope.loginError = message.data.detail;
+
+                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                 });
         };
 

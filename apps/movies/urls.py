@@ -9,3 +9,4 @@ router.register(r'movies', views.MovieViewSet)
 router.register(r'movies-genres', views.MovieGenreViewSet)
 urlpatterns = router.urls
 urlpatterns += url(r'^current-user$', views.current_user),
+urlpatterns += url(r'^login/', views.login),

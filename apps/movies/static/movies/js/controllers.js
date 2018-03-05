@@ -178,20 +178,13 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         $scope.loginError = '';
 
         $scope.login = function (credentials) {
-            console.log('logme in');
             $scope.loginError = '';
             AuthService.login(credentials)
                 .then(function successCallback (user) {
-                    console.log('ss')
                     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                    console.log(AUTH_EVENTS.loginSuccess)
-                    //$scope.setCurrentUser(user);
                     $state.go('movies', {});
                 }, function errorCallback (message) {
-                    console.log('sed')
-                    console.log(message)
                     $scope.loginError = message.data.detail;
-
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                 });
         };

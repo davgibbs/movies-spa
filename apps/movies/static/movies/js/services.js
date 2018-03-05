@@ -12,9 +12,8 @@ angular.module('movieApp.services', []).service('popupService', function($window
         return $http
               .post('/api/login/', credentials)
               .then(function (res) {
-                console.log(res)
-                Session.create(res.data.id, res.data.username);
-                return res.data.username;
+                  Session.create(res.data.id, res.data.username);
+                  return res.data.username;
               });
     };
 

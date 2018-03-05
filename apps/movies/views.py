@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import exceptions
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate, get_user_model, logout
 
 from .serializers import MovieGenreSerializer, MovieSerializer, UserSerializer
 from .models import Movie, MovieGenre
@@ -39,8 +39,6 @@ def current_user(request):
 @api_view(['POST'])
 @permission_classes((AllowAny, ))
 def login(request):
-    print('login')
-    # Get the username and password
     username = request.data.get('username', None)
     password = request.data.get('password', None)
 
@@ -60,9 +58,13 @@ def login(request):
     if not user.is_active:
         raise exceptions.AuthenticationFailed('User inactive or deleted.')
 
-    # import pdb; pdb.set_trace()
-    print(user)
     serializer = UserSerializer(user)
-    print(serializer.data)
     return Response(serializer.data)
-    # return user, None  # authentication successful
+
+
+def logout(request):
+    print('logout')
+    print(request)
+    logout(request)
+    print('redirect')
+    return HttpResponseRedirect('http://127.0.0.1:8000/')

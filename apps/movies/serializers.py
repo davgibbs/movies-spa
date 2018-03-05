@@ -21,4 +21,4 @@ class MovieSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'is_authenticated')
+        fields = ('id', 'username')

@@ -30,6 +30,8 @@ class MovieGenreViewSet(viewsets.ModelViewSet):
 def current_user(request):
     if request.user.id is None:
         return Response({'username': 'Anonymous User', 'id': None, })
+    print(request.user)
+    print(get_user_model())
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
@@ -59,6 +61,8 @@ def login(request):
         raise exceptions.AuthenticationFailed('User inactive or deleted.')
 
     # import pdb; pdb.set_trace()
+    print(user)
     serializer = UserSerializer(user)
+    print(serializer.data)
     return Response(serializer.data)
-    #return user, None  # authentication successful
+    # return user, None  # authentication successful

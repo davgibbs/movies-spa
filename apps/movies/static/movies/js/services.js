@@ -13,8 +13,8 @@ angular.module('movieApp.services', []).service('popupService', function($window
               .post('/api/login/', credentials)
               .then(function (res) {
                 console.log(res)
-                Session.create(res.data.id, res.data.user.id, res.data.user.role);
-                return res.data.user;
+                Session.create(res.data.id, res.data.username);
+                return res.data.username;
               });
     };
 
@@ -28,11 +28,9 @@ angular.module('movieApp.services', []).service('popupService', function($window
   this.create = function (sessionId, userId, userRole) {
     this.id = sessionId;
     this.userId = userId;
-    this.userRole = userRole;
   };
   this.destroy = function () {
     this.id = null;
     this.userId = null;
-    this.userRole = null;
   };
 });

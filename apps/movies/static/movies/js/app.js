@@ -1,6 +1,25 @@
 'use strict';
 
-var movieapp = angular.module('movieApp', ['ui.router', 'ngResource', 'ngAnimate', 'ui.bootstrap', 'movieApp.controllers', 'movieApp.services', 'movieApp.directives']);
+var movieapp = angular.module('movieApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngCookies', 'ui.bootstrap', 'movieApp.controllers', 'movieApp.services', 'movieApp.directives']);
+
+movieapp.factory('tokenInterceptor', function($cookies) {
+  var headerName = "Authorization";
+  var cookieName = "token";
+
+  return {
+    request: function(config) {
+      config.headers = config.headers || {};
+      console.log($cookies.get('token'));
+      if ($cookies.get('token')) {
+        config.headers["Authorization"] = 'Token ' + $cookies.get('token');
+      }
+      return config;
+    },
+    responseError: function (respones) {
+      location.href=login_url;
+    }
+  }
+});
 
 movieapp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $interpolateProvider) {
 
@@ -38,6 +57,8 @@ movieapp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $int
     // angular which cookie to add to what header.
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+    $httpProvider.interceptors.push('tokenInterceptor');
 
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');

@@ -10,7 +10,7 @@ angular.module('movieApp.services', []).service('popupService', function($window
 
     authService.login = function (credentials) {
         return $http
-              .post('/api/login/', credentials)
+              .post('/api-auth/login/', credentials)
               .then(function (res) {
                   Session.create(res.data.id, res.data.username);
                   return res.data.username;

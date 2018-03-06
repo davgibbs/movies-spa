@@ -1,5 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from django.conf.urls import url
+from django.contrib.auth import views as auth_views
 
 from . import views
 
@@ -9,5 +10,4 @@ router.register(r'movies', views.MovieViewSet)
 router.register(r'movies-genres', views.MovieGenreViewSet)
 urlpatterns = router.urls
 urlpatterns += url(r'^current-user$', views.current_user),
-urlpatterns += url(r'^login/', views.login),
-urlpatterns += url(r'^logout/', views.logout, name='movies-logout'),
+

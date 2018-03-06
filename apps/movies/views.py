@@ -34,37 +34,3 @@ def current_user(request):
     print(get_user_model())
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes((AllowAny, ))
-def login(request):
-    username = request.data.get('username', None)
-    password = request.data.get('password', None)
-
-    if not username or not password:
-        raise exceptions.AuthenticationFailed('No credentials provided.')
-
-    credentials = {
-        get_user_model().USERNAME_FIELD: username,
-        'password': password
-    }
-
-    user = authenticate(**credentials)
-
-    if user is None:
-        raise exceptions.AuthenticationFailed('Invalid username/password.')
-
-    if not user.is_active:
-        raise exceptions.AuthenticationFailed('User inactive or deleted.')
-
-    serializer = UserSerializer(user)
-    return Response(serializer.data)
-
-
-def logout(request):
-    print('logout')
-    print(request)
-    logout(request)
-    print('redirect')
-    return HttpResponseRedirect('http://127.0.0.1:8000/')

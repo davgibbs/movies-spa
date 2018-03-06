@@ -18,8 +18,7 @@ from django.conf.urls.static import static
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
-
-# from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.authtoken import views as rest_framework_views
 
 from movies.urls import router
 
@@ -27,5 +26,6 @@ from movies.urls import router
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
+    url(r'^accounts/', include('accounts.urls')),
     url(r'^$', TemplateView.as_view(template_name='movies/index.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

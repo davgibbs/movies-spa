@@ -2,21 +2,20 @@
 
 var movieapp = angular.module('movieApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngCookies', 'ui.bootstrap', 'movieApp.controllers', 'movieApp.services', 'movieApp.directives']);
 
-movieapp.factory('tokenInterceptor', function($cookies) {
-  var headerName = "Authorization";
-  var cookieName = "token";
+movieapp.factory('tokenInterceptor', function(Session) {
 
   return {
     request: function(config) {
-      config.headers = config.headers || {};
-      console.log($cookies.get('token'));
-      if ($cookies.get('token')) {
-        config.headers["Authorization"] = 'Token ' + $cookies.get('token');
+      //config.headers = config.headers || {};
+      console.log(Session.get('id'));
+      console.log()
+      if (Session.get('id')) {
+        config.headers["HTTP_AUTHORIZATION"] = 'Token ' + Session.get('id');
       }
       return config;
     },
-    responseError: function (respones) {
-      location.href=login_url;
+    responseError: function (response) {
+      location.href='#/login';
     }
   }
 });
@@ -57,8 +56,9 @@ movieapp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $int
     // angular which cookie to add to what header.
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-    $httpProvider.interceptors.push('tokenInterceptor');
+    //$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';  //?
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/json';  //?
+    //$httpProvider.interceptors.push('tokenInterceptor');
 
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');

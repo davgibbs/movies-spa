@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination'])
-    .controller('MovieListController', function($scope, popupService, $http) {
+    .controller('MovieListController', function($scope, popupService, $http, Session) {
 
         $scope.movies = [];
+        console.log(Session.id)
 
         $scope.order_by_options = [{
             type: 'Title A-Z',
@@ -163,14 +164,16 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.overStar = value;
             $scope.percent = 100 * (value / $scope.max);
         };
-    }).controller('UserViewController', function($scope, $http) {
+    }).controller('UserViewController', function($scope, Session) {
+        console.log(Session.username)
+        $scope.userName = Session.username;
         
-        $http.get("/api/current-user")
-            .then(function successCallback(response) {
-                $scope.userName = response.data.username;
-            });
+//        $http.get("/api/current-user")
+//            .then(function successCallback(response) {
+//                $scope.userName = response.data.username;
+//            });
 
-    }).controller('LoginController', function($scope, $rootScope, $state, AUTH_EVENTS, AuthService) {
+    }).controller('LoginController', function($scope, $rootScope, $state, AuthService) {
         $scope.credentials = {
             username: '',
             password: ''
@@ -181,11 +184,10 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.loginError = '';
             AuthService.login(credentials)
                 .then(function successCallback (user) {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    $rootScope.$broadcast
                     $state.go('movies', {});
                 }, function errorCallback (message) {
-                    $scope.loginError = message.data.detail;
-                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                    $scope.loginError = message.data.non_field_errors[0];
                 });
         };
 

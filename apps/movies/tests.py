@@ -1,7 +1,9 @@
 from collections import OrderedDict
 
 from django.test import TestCase
+from django.contrib.auth.models import User
 from rest_framework.test import APIClient
+from rest_framework.authtoken.models import Token
 
 from movies.models import Movie, MovieGenre
 
@@ -36,17 +38,42 @@ class MovieTestCase(TestCase):
                                                       ('rating', 3)])])
 
     def test_add_movie(self):
+        user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
+        Token.objects.create(user=user)
+        mytoken = Token.objects.get(user=user).key
+
         client = APIClient()
-        # Note need to send form data below, not json
+
+        header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
         response = client.post('/api/movies', {'title': 'Lion King',
                                                'summary': 'Lion Movie',
                                                'release_year': '1994',
                                                'rating': 2,
-                                               'director': 'Roger Allers'}, format='json')
+                                               'director': 'Roger Allers'}, format='json', **header)
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(Movie.objects.all()), 1)
+        user.delete()
 
+    def test_delete_movie(self):
+        movie_genre = MovieGenre(name='Drama')
+        movie_genre.save()
+
+        movie = Movie(title="Movie 1")
+        movie.save()
+
+        user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
+        Token.objects.create(user=user)
+        mytoken = Token.objects.get(user=user).key
+
+        client = APIClient()
+
+        header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
+        response = client.delete('/api/movies/' + str(movie.id), format='json', **header)
+
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(len(Movie.objects.all()), 0)
+        user.delete()
 
 class MovieGenreTestCase(TestCase):
 
@@ -61,7 +88,40 @@ class MovieGenreTestCase(TestCase):
         movie_genre.delete()
 
 
-# class UserLoginTestCase(TestCase):
-#
-#     def test_user_login(self):
-#         admin:password123
+class UserLoginTestCase(TestCase):
+
+    def test_user_login(self):
+        user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
+
+        client = APIClient()
+        credentials = {'username': 'admin', 'password': 'password123'}
+        # Create and return the auth token for the user
+        response = client.post('/rest-auth/login/', credentials, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {'key': user.auth_token.key})
+        user.delete()
+
+    def test_user_logout(self):
+        user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
+        self.assertEqual(hasattr(user, 'auth_token'), False)
+
+        client = APIClient()
+        credentials = {'username': 'admin', 'password': 'password123'}
+        # Create and return the auth token for the user
+        response = client.post('/rest-auth/login/', credentials, format='json')
+        self.assertEqual(response.status_code, 200)
+        user = User.objects.get(username='admin')
+        self.assertEqual(response.data, {'key': user.auth_token.key})
+
+        # Now logout
+        user = User.objects.get(username='admin')
+        self.assertEqual(hasattr(user, 'auth_token'), True)
+        mytoken = Token.objects.get(user=user).key
+        header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
+
+        response = client.post('/rest-auth/logout/', {}, format='json', **header)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {'detail': 'Successfully logged out.'})
+        user = User.objects.get(username='admin')
+        self.assertEqual(hasattr(user, 'auth_token'), False)
+

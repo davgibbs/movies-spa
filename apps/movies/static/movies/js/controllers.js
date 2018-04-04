@@ -45,6 +45,8 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                 $http.delete("/api/movies/" + movie.id)
                     .then(function successCallback(response) {
                         $scope.loadMovies();
+                    }, function errorCallback(response){
+                        popupService.showPopup('Not authorised to delete')
                     });
             }
         };
@@ -164,9 +166,31 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.overStar = value;
             $scope.percent = 100 * (value / $scope.max);
         };
-    }).controller('UserViewController', function($scope, Session) {
-        console.log(Session.username)
-        $scope.userName = Session.username;
+    }).controller('UserViewController', function($scope, AuthService) {
+        console.log(AuthService.username()) //todo here!
+
+        $scope.isAuthorized = AuthService.isAuthorized;
+
+        $scope.$on('success', function(){
+            console.log('loggy')
+            $scope.userName = AuthService.username();
+            });
+
+//        Session.subscribe($scope, function somethingChanged() {
+//            // Handle notification
+//            console.log(Session.username) //todo here!
+//        });
+//        $scope.setCurrentUser = function (user) {
+//            $scope.currentUser = user;
+//        };
+//        $scope.$on('parent', function (event, data) {
+//            console.log(data); // 'Some data'
+//          });
+
+//        setInterval(function(){
+//            console.log('here') //todo here!
+//            console.log(Session.username) //todo here!
+//        }, 4000);
         
 //        $http.get("/api/current-user")
 //            .then(function successCallback(response) {
@@ -184,10 +208,13 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.loginError = '';
             AuthService.login(credentials)
                 .then(function successCallback (user) {
-                    $rootScope.$broadcast
+
+                    $rootScope.$broadcast('success');
+                    //$scope.setCurrentUser(user);
                     $state.go('movies', {});
                 }, function errorCallback (message) {
                     $scope.loginError = message.data.non_field_errors[0];
+                    $rootScope.$broadcast('fail');
                 });
         };
 

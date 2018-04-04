@@ -1,5 +1,5 @@
 <div class="centre_text">
-    <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Movie</a>
+    <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration"  ng-class="!loggedIn ? 'disabled' : ''">Add New Movie</a>
     <br>
     <br>
     <select class="form-control" ng-model="selectedOrder" ng-options="option.type for option in order_by_options track by option.id"></select>
@@ -13,7 +13,7 @@
                 <p><span uib-rating ng-model="movie.rating" read-only="true" aria-labelledby="default-rating" for="movie-rating"></span></p>
                 <p>
                     <a class="btn btn-small btn-info" href="#!/movies/[[movie.id]]/view">Read more</a>
-                    <a class="btn btn-danger" ng-click="deleteMovie(movie)">Delete</a>
+                    <a class="btn btn-danger" ng-class="!loggedIn ? 'disabled' : ''" ng-click="deleteMovie(movie)">Delete</a>
                 </p>
             </div>
         </div>

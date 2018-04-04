@@ -1,10 +1,15 @@
 'use strict';
 
 angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination'])
-    .controller('MovieListController', function($scope, popupService, $http, Session) {
+    .controller('MovieListController', function($scope, popupService, $http, AuthService) {
 
         $scope.movies = [];
-        console.log(Session.id)
+        $scope.loggedIn =  AuthService.isAuthenticated();
+        console.log('start')
+        $scope.$on('logout', function(){
+            console.log('out there')
+            $scope.loggedIn = AuthService.isAuthenticated();
+        });
 
         $scope.order_by_options = [{
             type: 'Title A-Z',
@@ -151,11 +156,34 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
         $scope.loadMovie();
 
-    }).controller('NavigationCtrl', function($scope, $location) {
+    }).controller('NavigationCtrl', function($scope, $rootScope, $location, $state, AuthService) {
+
+        $scope.loggedIn = AuthService.isAuthenticated();
+        $scope.$on('success', function(){
+            $scope.loggedIn = AuthService.isAuthenticated();
+        });
+        $scope.$on('logout', function(){
+            $scope.loggedIn = AuthService.isAuthenticated();
+        });
+
+        console.log(AuthService.isAuthenticated())
         $scope.isCurrentPath = function(path) {
             // Not using $location.path().startsWith(path); as not supported in all browsers (phantomjs)
             // http://stackoverflow.com/questions/646628/how-to-check-if-a-string-startswith-another-string
             return ($location.path().substr(0, path.length) == path);
+        };
+
+        $scope.logout = function ($event) {
+            console.log('got here')
+            $event.preventDefault();
+            AuthService.logout()
+                .then(function successCallback (user) {
+                    $rootScope.$broadcast('logout');
+                    //$scope.setCurrentUser(user);
+                    $state.go('movies', {});
+                }, function errorCallback (message) {
+                    $rootScope.$broadcast('fail');
+                });
         };
 
     }).controller('RatingController', function($scope) {
@@ -174,7 +202,10 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         $scope.$on('success', function(){
             console.log('loggy')
             $scope.userName = AuthService.username();
-            });
+        });
+        $scope.$on('logout', function(){
+            $scope.userName = AuthService.username();
+        });
 
 //        Session.subscribe($scope, function somethingChanged() {
 //            // Handle notification

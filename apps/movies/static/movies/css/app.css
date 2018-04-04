@@ -55,6 +55,12 @@ h3 {
   display: none;
 }
 
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
 /* Login Page */
 .login-form {
     width: 340px;

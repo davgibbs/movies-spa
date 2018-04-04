@@ -28,6 +28,17 @@ angular.module('movieApp.services', [])
     authService.username = function () {
         return Session.userId;
     };
+
+    authService.logout = function (credentials) {
+        return $http({
+                    method: 'POST',
+                    url: '/rest-auth/logout/',
+                })
+                .then(function (res) {
+                      Session.destroy();
+                  });
+    };
+
     return authService;
 })
 

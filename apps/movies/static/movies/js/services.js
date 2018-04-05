@@ -41,7 +41,6 @@ angular.module('movieApp.services', [])
 
     return authService;
 })
-
 .service('Session', function () {
   this.create = function (sessionId, userId) {
     this.id = sessionId;

@@ -156,10 +156,10 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
         $scope.loadMovie();
 
-    }).controller('NavigationCtrl', function($scope, $rootScope, $location, $state, AuthService) {
+    }).controller('NavigationCtrl', function($scope, $rootScope, $location, $state, AuthService, AUTH_EVENTS) {
 
         $scope.loggedIn = AuthService.isAuthenticated();
-        $scope.$on('success', function(){
+        $scope.$on(AUTH_EVENTS.loginSuccess, function(){
             $scope.loggedIn = AuthService.isAuthenticated();
         });
         $scope.$on('logout', function(){
@@ -174,7 +174,6 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         };
 
         $scope.logout = function ($event) {
-            console.log('got here')
             $event.preventDefault();
             AuthService.logout()
                 .then(function successCallback (user) {
@@ -194,13 +193,11 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.overStar = value;
             $scope.percent = 100 * (value / $scope.max);
         };
-    }).controller('UserViewController', function($scope, AuthService) {
-        console.log(AuthService.username()) //todo here!
+    }).controller('UserViewController', function($scope, AuthService, AUTH_EVENTS) {
 
         $scope.isAuthorized = AuthService.isAuthorized;
 
-        $scope.$on('success', function(){
-            console.log('loggy')
+        $scope.$on(AUTH_EVENTS.loginSuccess, function(){
             $scope.userName = AuthService.username();
         });
         $scope.$on('logout', function(){
@@ -228,7 +225,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 //                $scope.userName = response.data.username;
 //            });
 
-    }).controller('LoginController', function($scope, $rootScope, $state, AuthService) {
+    }).controller('LoginController', function($scope, $rootScope, $state, AuthService, AUTH_EVENTS) {
         $scope.credentials = {
             username: '',
             password: ''
@@ -240,7 +237,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             AuthService.login(credentials)
                 .then(function successCallback (user) {
 
-                    $rootScope.$broadcast('success');
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                     //$scope.setCurrentUser(user);
                     $state.go('movies', {});
                 }, function errorCallback (message) {

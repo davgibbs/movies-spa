@@ -9,9 +9,9 @@ movieapp.factory('tokenInterceptor', function(Session) {
       //config.headers = config.headers || {};
       console.log(Session.get('id'));
       console.log()
-      if (Session.get('id')) {
-        config.headers["HTTP_AUTHORIZATION"] = 'Token ' + Session.get('id');
-      }
+//      if (Session.get('id')) {
+//        config.headers["HTTP_AUTHORIZATION"] = 'Token ' + Session.get('id');
+//      }
       return config;
     },
     responseError: function (response) {

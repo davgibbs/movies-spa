@@ -23,14 +23,3 @@ class MovieGenreViewSet(viewsets.ModelViewSet):
     """
     queryset = MovieGenre.objects.all().order_by('name')
     serializer_class = MovieGenreSerializer
-
-
-@api_view(['GET'])
-@permission_classes((AllowAny, ))
-def current_user(request):
-    if request.user.id is None:
-        return Response({'username': 'Anonymous User', 'id': None, })
-    print(request.user)
-    print(get_user_model())
-    serializer = UserSerializer(request.user)
-    return Response(serializer.data)

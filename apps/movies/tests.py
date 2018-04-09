@@ -3,7 +3,8 @@ from collections import OrderedDict
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
-from rest_framework.authtoken.models import Token
+#from rest_framework.authtoken.models import Token, Session
+from django.contrib.sessions.models import Session
 
 from movies.models import Movie, MovieGenre
 
@@ -39,12 +40,17 @@ class MovieTestCase(TestCase):
 
     def test_add_movie(self):
         user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
-        Token.objects.create(user=user)
-        mytoken = Token.objects.get(user=user).key
+        #Token.objects.create(user=user)
+        #mytoken = Token.objects.get(user=user).key
+        print('Here')
+        print(dir(Session.objects))
+        print('End')
+        mysession = Session.objects.get(user=user).key
 
         client = APIClient()
 
-        header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
+        #header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
+        header = {'sessionid': '{0}'.format(mysession)}
         response = client.post('/api/movies', {'title': 'Lion King',
                                                'summary': 'Lion Movie',
                                                'release_year': '1994',
@@ -63,12 +69,13 @@ class MovieTestCase(TestCase):
         movie.save()
 
         user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
-        Token.objects.create(user=user)
-        mytoken = Token.objects.get(user=user).key
+        #Token.objects.create(user=user)
+        #mytoken = Token.objects.get(user=user).key
 
         client = APIClient()
 
-        header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
+        #header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
+        header = {}
         response = client.delete('/api/movies/' + str(movie.id), format='json', **header)
 
         self.assertEqual(response.status_code, 204)
@@ -102,26 +109,44 @@ class UserLoginTestCase(TestCase):
         user.delete()
 
     def test_user_logout(self):
+        client = APIClient()
+        #print(client)
+        #print(self.client)
+        print('dfdfd')
+        print(dir(client.session.session_key))
+        print(client.session.session_key)
+        session = Session.objects.get(session_key=client.session.session_key)
+        print(dir(Session.objects.get(session_key=client.session.session_key)))
+        uid = session.get_decoded().get('_auth_user_id')
+        print(uid)
+        user = User.objects.get(pk=uid)
+        print(user)
+
+        print('dfdfd2')
         user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
         self.assertEqual(hasattr(user, 'auth_token'), False)
+        #print(dir(client.session))
+        self.assertEqual(user.is_authenticated(), False)
 
-        client = APIClient()
         credentials = {'username': 'admin', 'password': 'password123'}
         # Create and return the auth token for the user
         response = client.post('/rest-auth/login/', credentials, format='json')
         self.assertEqual(response.status_code, 200)
         user = User.objects.get(username='admin')
         self.assertEqual(response.data, {'key': user.auth_token.key})
+        self.assertEqual(user.is_authenticated(), True)
 
         # Now logout
         user = User.objects.get(username='admin')
         self.assertEqual(hasattr(user, 'auth_token'), True)
         mytoken = Token.objects.get(user=user).key
-        header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
+        #header = {'HTTP_AUTHORIZATION': 'Token {0}'.format(mytoken)}
+        self.client.session['_auth_user_id']
 
-        response = client.post('/rest-auth/logout/', {}, format='json', **header)
+        response = client.post('/rest-auth/logout/', {}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {'detail': 'Successfully logged out.'})
         user = User.objects.get(username='admin')
         self.assertEqual(hasattr(user, 'auth_token'), False)
+        self.assertEqual(user.is_authenticated(), False)
 

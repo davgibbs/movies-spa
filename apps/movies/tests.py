@@ -1,9 +1,9 @@
+import datetime
 from collections import OrderedDict
 
 from django.test import TestCase
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
-#from rest_framework.authtoken.models import Token, Session
 from django.contrib.sessions.models import Session
 
 from movies.models import Movie, MovieGenre
@@ -101,18 +101,21 @@ class UserLoginTestCase(TestCase):
         user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
 
         client = APIClient()
+        sesh = Session.objects.all()
+        print(sesh)
+        self.assertEqual(sesh.get_decoded(), {})
+        # login user
         credentials = {'username': 'admin', 'password': 'password123'}
-        # Create and return the auth token for the user
         response = client.post('/rest-auth/login/', credentials, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {'key': user.auth_token.key})
+        # just ignore token
+        sesh2 = Session.objects.filter(expire_date__gte=datetime.datetime.now())[0]
+        self.assertEqual(sesh.get_decoded(), {})
         user.delete()
 
     def test_user_logout(self):
         client = APIClient()
-        #print(client)
-        #print(self.client)
-        print('dfdfd')
+
         print(dir(client.session.session_key))
         print(client.session.session_key)
         session = Session.objects.get(session_key=client.session.session_key)

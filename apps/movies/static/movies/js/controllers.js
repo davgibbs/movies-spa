@@ -158,7 +158,8 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
     }).controller('NavigationCtrl', function($scope, $rootScope, $location, $state, AuthService, AUTH_EVENTS) {
 
-        $scope.loggedIn = AuthService.isAuthenticated();
+        // On initial load, check if the user is logged in
+        $scope.loggedIn = AuthService.getUser();
         $scope.$on(AUTH_EVENTS.loginSuccess, function(){
             $scope.loggedIn = AuthService.isAuthenticated();
         });

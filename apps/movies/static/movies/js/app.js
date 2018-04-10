@@ -8,7 +8,7 @@ movieapp.factory('tokenInterceptor', function(Session) {
     request: function(config) {
       //config.headers = config.headers || {};
       console.log(Session.get('id'));
-      console.log()
+      console.log(config)
 //      if (Session.get('id')) {
 //        config.headers["HTTP_AUTHORIZATION"] = 'Token ' + Session.get('id');
 //      }

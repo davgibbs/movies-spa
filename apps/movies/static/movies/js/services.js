@@ -16,9 +16,26 @@ angular.module('movieApp.services', [])
                     data: JSON.stringify(credentials),
                 })
                 .then(function (res) {
+                    console.log(res)
                       Session.create(res.data.key, credentials.username);
                       return credentials.username;
                   });
+    };
+
+    authService.getUser = function () {
+        // Used on initial load of the app to get the user (if logged in)
+          return $http({
+                    method: 'GET',
+                    url: '/rest-auth/user/',
+                })
+                .then(function (res) {
+                    console.log(res)
+                      Session.create('sesh', res.data.username);
+                      return true;
+                  }).catch(function (data) {
+                    // Handle error here
+                    console.log(data)
+                });
     };
 
     authService.isAuthenticated = function () {
@@ -42,6 +59,7 @@ angular.module('movieApp.services', [])
     return authService;
 })
 .service('Session', function () {
+  // Stores the session id and the user id.
   this.create = function (sessionId, userId) {
     this.id = sessionId;
     this.userId = userId;

@@ -19,4 +19,4 @@ script:
   - html-beautify -r apps/movies/static/movies/partials/*.html
   - js-beautify -r apps/movies/static/movies/js/*.js
   - phantomjs -v
-  - karma start --single-run
+#  - karma start --single-run

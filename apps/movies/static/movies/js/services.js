@@ -25,16 +25,14 @@ angular.module('movieApp.services', [])
             // Used on initial load of the app to get the user (if logged in)
             return $http({
                     method: 'GET',
-                    url: '/rest-auth/user/',
+                    url: '/api/current-user/',
                 })
                 .then(function(res) {
-                    Session.create('sesh', res.data.username);
-                    return true;
+                    if (res.data.loggedin == true){
+                        Session.create('sesh', res.data.username);
+                    }
+                    return res.data.loggedin;
                 })
-                .catch(function(err) {
-                    // Handle error here
-                    return $q.reject(err);
-                });
         };
 
         authService.isAuthenticated = function() {

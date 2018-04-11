@@ -2,24 +2,6 @@
 
 var movieapp = angular.module('movieApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngCookies', 'ui.bootstrap', 'movieApp.controllers', 'movieApp.services', 'movieApp.directives']);
 
-//movieapp.factory('tokenInterceptor', function(Session) {
-
-/*  return {
-    request: function(config) {
-      //config.headers = config.headers || {};
-      console.log(Session.get('id'));
-      console.log(config)
-//      if (Session.get('id')) {
-//        config.headers["HTTP_AUTHORIZATION"] = 'Token ' + Session.get('id');
-//      }
-      return config;
-    },
-    responseError: function (response) {
-      location.href='#/login';
-    }
-  }
-});*/
-
 movieapp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $interpolateProvider) {
 
         $stateProvider.
@@ -52,13 +34,10 @@ movieapp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $int
         // For any unmatched url, redirect to /movies
         $urlRouterProvider.otherwise('/movies');
 
-        // django and angular both support csrf tokens. This tells
-        // angular which cookie to add to what header.
+        // django and angular both support csrf tokens. This tells angular which cookie to add to what header.
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-        //$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';  //?
-        $httpProvider.defaults.headers.post['Content-Type'] = 'application/json'; //?
-        //$httpProvider.interceptors.push('tokenInterceptor');
+        $httpProvider.defaults.headers.post['Content-Type'] = 'application/json';
 
         $interpolateProvider.startSymbol('[[');
         $interpolateProvider.endSymbol(']]');

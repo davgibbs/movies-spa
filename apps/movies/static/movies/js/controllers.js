@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination'])
-    .controller('MovieListController', function($scope, popupService, $http, AuthService) {
+    .controller('MovieListController', function($scope, popupService, $http, AuthService, AUTH_EVENTS) {
 
         $scope.movies = [];
         $scope.loggedIn = AuthService.isAuthenticated();
 
-        $scope.$on('logout', function() {
-            $scope.loggedIn = AuthService.isAuthenticated();
+        $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
+            $scope.loggedIn = false;
         });
 
         $scope.order_by_options = [{
@@ -158,12 +158,16 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
     }).controller('NavigationCtrl', function($scope, $rootScope, $location, $state, AuthService, AUTH_EVENTS) {
 
         // On initial load, check if the user is logged in
-        $scope.loggedIn = AuthService.getUser();
+        AuthService.getUser()
+            .then(function successCallback(data) {
+                $scope.loggedIn = data.loggedin;
+            });
+
         $scope.$on(AUTH_EVENTS.loginSuccess, function() {
-            $scope.loggedIn = AuthService.isAuthenticated();
+            $scope.loggedIn = true;
         });
-        $scope.$on('logout', function() {
-            $scope.loggedIn = AuthService.isAuthenticated();
+        $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
+            $scope.loggedIn = false;
         });
 
         $scope.isCurrentPath = function(path) {
@@ -176,7 +180,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $event.preventDefault();
             AuthService.logout()
                 .then(function successCallback(user) {
-                    $rootScope.$broadcast('logout');
+                    $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
                     //$scope.setCurrentUser(user);
                     $state.go('movies', {});
                 }, function errorCallback(message) {
@@ -194,35 +198,21 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         };
     }).controller('UserViewController', function($scope, AuthService, AUTH_EVENTS) {
 
-        $scope.isAuthorized = AuthService.isAuthorized;
+        AuthService.getUser()
+            .then(function successCallback(data) {
+                $scope.loggedIn = data.loggedin;
+                if ($scope.loggedIn == true){
+                    $scope.userName = data.username;
+                }
+            });
+
 
         $scope.$on(AUTH_EVENTS.loginSuccess, function() {
             $scope.userName = AuthService.username();
         });
-        $scope.$on('logout', function() {
+        $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $scope.userName = AuthService.username();
         });
-
-        //        Session.subscribe($scope, function somethingChanged() {
-        //            // Handle notification
-        //            console.log(Session.username) //todo here!
-        //        });
-        //        $scope.setCurrentUser = function (user) {
-        //            $scope.currentUser = user;
-        //        };
-        //        $scope.$on('parent', function (event, data) {
-        //            console.log(data); // 'Some data'
-        //          });
-
-        //        setInterval(function(){
-        //            console.log('here') //todo here!
-        //            console.log(Session.username) //todo here!
-        //        }, 4000);
-
-        //        $http.get("/api/current-user")
-        //            .then(function successCallback(response) {
-        //                $scope.userName = response.data.username;
-        //            });
 
     }).controller('LoginController', function($scope, $rootScope, $state, AuthService, AUTH_EVENTS) {
         $scope.credentials = {
@@ -235,13 +225,11 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.loginError = '';
             AuthService.login(credentials)
                 .then(function successCallback(user) {
-
                     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                    //$scope.setCurrentUser(user);
                     $state.go('movies', {});
                 }, function errorCallback(message) {
                     $scope.loginError = message.data.non_field_errors[0];
-                    $rootScope.$broadcast('fail');
+                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                 });
         };
 

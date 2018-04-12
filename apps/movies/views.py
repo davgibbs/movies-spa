@@ -26,6 +26,9 @@ class MovieGenreViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 @permission_classes((AllowAny, ))
 def current_user(request):
+    """
+    API view to tell whether the current user session is logged in or not
+    """
     if request.user.id is None:
         return Response({'loggedin': False})
     return Response({'loggedin': True, 'username': request.user.username})

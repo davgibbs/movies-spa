@@ -26,6 +26,7 @@ class Movie(models.Model):
     genre = models.ForeignKey(MovieGenre, related_name='movie_genre', default=1)
     image = models.ImageField(upload_to='movies/', default='movies/Movie.jpg')
     rating = models.PositiveIntegerField(validators=[MaxValueValidator(5)], default=3)
+    # uploaded =
 
     def __unicode__(self):
         return self.title

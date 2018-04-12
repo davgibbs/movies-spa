@@ -31,7 +31,7 @@
             <tr>
                 <td>
                     <a class="btn btn-info" href="#!/movies">Back</a>
-                    <a class="btn btn-primary" ui-sref="editMovie({id:movie.id})">Edit</a>
+                    <a class="btn btn-primary" ui-sref="editMovie({id:movie.id})" ng-class="!loggedIn ? 'disabled' : ''">Edit</a>
                 </td>
                 <td>&nbsp;</td>
             </tr>

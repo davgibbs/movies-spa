@@ -123,7 +123,25 @@ class UserLoginTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(is_user_authenticated(client.session.session_key), True)
         self.assertEqual(len(Session.objects.all()), 1)
-        user.delete()
+        self.assertEqual(Session.objects.all()[0].get_decoded().get('_auth_user_id'), str(user.id))
+        self.assertEqual(Session.objects.all()[0].get_decoded().get('_auth_user_id'), str(user.id))
+
+    def test_user_login_bad_username(self):
+        User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
+        self.assertEqual(len(Session.objects.all()), 0)
+
+        client = APIClient()
+        self.assertEqual(is_user_authenticated(client.session.session_key), False)
+
+        # login user
+        credentials = {'username': 'admin-test', 'password': 'password1234s'}
+        response = client.post('/rest-auth/login/', credentials, format='json')
+        # just ignore token that is included in response
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {'non_field_errors': ['Unable to log in with provided credentials.']})
+        self.assertEqual(is_user_authenticated(client.session.session_key), False)
+        self.assertEqual(len(Session.objects.all()), 1)
+        self.assertEqual(Session.objects.all()[0].get_decoded().get('_auth_user_id'), None)
 
     def test_user_logout(self):
         user = User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
@@ -156,7 +174,7 @@ class UserLoginTestCase(TestCase):
         self.assertEqual(response.data, {'loggedin': False})
 
     def test_get_session_loggedin_yes(self):
-        user = User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
+        User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
         client = APIClient()
         client.login(username='admin-test', password='password1234')
         response = client.get('/api/current-user/', {}, format='json')

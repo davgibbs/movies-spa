@@ -28,11 +28,11 @@ angular.module('movieApp.services', [])
                     url: '/api/current-user/',
                 })
                 .then(function(res) {
-                    if (res.data.loggedin == true){
+                    if (res.data.loggedin === true){
                         Session.create('sesh', res.data.username);
                     }
-                    return res.data.loggedin;
-                })
+                    return res.data;
+                });
         };
 
         authService.isAuthenticated = function() {

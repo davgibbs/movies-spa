@@ -50,12 +50,21 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                     .then(function successCallback(response) {
                         $scope.loadMovies();
                     }, function errorCallback(response) {
-                        popupService.showPopup('Not authorised to delete');
+                        if (response.status == 403){
+                            popupService.showPopup('Not authorised to delete');
+                        } else {
+                            popupService.showPopup('Unexpected error ' + response);
+                        }
                     });
             }
         };
 
-    }).controller('MovieViewController', function($scope, $stateParams, $http) {
+    }).controller('MovieViewController', function($scope, $stateParams, $http, AuthService, AUTH_EVENTS) {
+
+        $scope.loggedIn = AuthService.isAuthenticated();
+        $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
+            $scope.loggedIn = false;
+        });
 
         $http.get("/api/movies/" + $stateParams.id)
             .then(function successCallback(response) {
@@ -181,10 +190,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             AuthService.logout()
                 .then(function successCallback(user) {
                     $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
-                    //$scope.setCurrentUser(user);
                     $state.go('movies', {});
-                }, function errorCallback(message) {
-                    $rootScope.$broadcast('fail');
                 });
         };
 
@@ -201,7 +207,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         AuthService.getUser()
             .then(function successCallback(data) {
                 $scope.loggedIn = data.loggedin;
-                if ($scope.loggedIn == true){
+                if ($scope.loggedIn === true){
                     $scope.userName = data.username;
                 }
             });

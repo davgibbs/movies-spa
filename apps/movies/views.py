@@ -31,4 +31,4 @@ def current_user(request):
     """
     if request.user.id is None:
         return Response({'loggedin': False})
-    return Response({'loggedin': True, 'username': request.user.username})
+    return Response({'loggedin': True, 'username': request.user.username, 'id': request.user.id})

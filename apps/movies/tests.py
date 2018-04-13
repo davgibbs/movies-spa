@@ -30,6 +30,7 @@ class MovieTestCase(TestCase):
         movie_genre = MovieGenre(name='Comedy')
         movie_genre.save()
 
+        User.objects.create_user('admin', 'myemail@test.com', 'password123')
         movie = Movie(title="Movie 1")
         movie.save()
 
@@ -45,7 +46,10 @@ class MovieTestCase(TestCase):
                                                       ('genre_obj', OrderedDict([('id', 1),
                                                                                  ('name', 'Comedy')])),
                                                       ('image', 'http://testserver/media/movies/Movie.jpg'),
-                                                      ('rating', 3)])])
+                                                      ('rating', 3),
+                                                      ('user', 1),
+                                                      ('user_obj', OrderedDict([('id', 1),
+                                                                                ('username', 'admin')]))])])
 
     def test_add_movie(self):
         user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
@@ -174,9 +178,9 @@ class UserLoginTestCase(TestCase):
         self.assertEqual(response.data, {'loggedin': False})
 
     def test_get_session_loggedin_yes(self):
-        User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
+        user = User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
         client = APIClient()
         client.login(username='admin-test', password='password1234')
         response = client.get('/api/current-user/', {}, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {'loggedin': True, 'username': 'admin-test'})
+        self.assertEqual(response.data, {'loggedin': True, 'username': 'admin-test', 'id': user.id})

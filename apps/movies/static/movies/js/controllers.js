@@ -103,6 +103,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             fd.append('genre', $scope.movie.genre);
             fd.append('rating', $scope.movie.rating);
 
+            //need user id
             $http.post("/api/movies", fd, {
                 transformRequest: angular.identity,
                 headers: {

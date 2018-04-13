@@ -30,11 +30,16 @@ describe('MovieViewController Tests', function() {
 
     it("get one is correct", function() {
         var stateParams = {id: 1}
+        var AuthService = {};
+        AuthService.isAuthenticated = function(){ return true; };
+        var AUTH_EVENTS = {logoutSuccess: 'logout'}
 
         controller('MovieViewController', {
             $scope: scope,
             $stateParams: stateParams,
             $httpBackend: $httpBackend,
+            AuthService: AuthService,
+            AUTH_EVENTS: AUTH_EVENTS,
         });
 
     $httpBackend.flush();

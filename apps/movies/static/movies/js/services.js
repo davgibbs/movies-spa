@@ -16,30 +16,52 @@ angular.module('movieApp.services', [])
                     data: JSON.stringify(credentials),
                 })
                 .then(function(res) {
-                    Session.create(res.data.key, credentials.username);
-                    return credentials.username;
+                    Session.create('sessionid', 9999, credentials.username); // hack while we wait to retrieve
+                    authService.getUser()
+                        .then(function successCallback(data) {
+                            Session.create('sessionid', data.pk, data.username);
+                            return data.username;
+                        });
                 });
+        };
+
+        authService.getUserStatus = function() {
+            // Used on initial load of the app to get the user status (logged in or not)
+            return $http({
+                        method: 'GET',
+                        url: '/api/user-status/',
+                    })
+                    .then(function(res) {
+                        if (res.data.loggedin === true){
+                            authService.getUser()
+                                .then(function successCallback(data) {
+                                    Session.create('sessionid', data.pk, data.username);
+                                });
+                        }
+                        return res.data.loggedin;
+                    });
         };
 
         authService.getUser = function() {
-            // Used on initial load of the app to get the user (if logged in)
+            // Used to get user details from bacend such as ID and username
             return $http({
-                    method: 'GET',
-                    url: '/api/current-user/',
-                })
-                .then(function(res) {
-                    if (res.data.loggedin === true){
-                        Session.create('sesh', res.data.username);
-                    }
-                    return res.data;
-                });
+                        method: 'GET',
+                        url: '/rest-auth/user/',
+                    })
+                    .then(function(res) {
+                        return res.data;
+                    });
         };
 
         authService.isAuthenticated = function() {
-            return !!Session.userId;
+            return Session.userId !== null;
         };
 
         authService.username = function() {
+            return Session.userName;
+        };
+
+        authService.userId = function() {
             return Session.userId;
         };
 
@@ -56,13 +78,15 @@ angular.module('movieApp.services', [])
         return authService;
     })
     .service('Session', function() {
-        // Stores the session id and the user id.
-        this.create = function(sessionId, userId) {
+        // Stores the session id, user id and the user name.
+        this.create = function(sessionId, userId, userName) {
             this.id = sessionId;
             this.userId = userId;
+            this.userName = userName;
         };
         this.destroy = function() {
             this.id = null;
             this.userId = null;
+            this.userName = null;
         };
     });

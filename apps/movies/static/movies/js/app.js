@@ -9,8 +9,7 @@ movieapp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $int
             url: '/movies',
             templateUrl: '/static/movies/partials/movies.html',
             controller: 'MovieListController'
-        }).
-        state('viewMovie', {
+        }).state('viewMovie', {
             url: '/movies/:id/view',
             templateUrl: '/static/movies/partials/movie-view.html',
             controller: 'MovieViewController'

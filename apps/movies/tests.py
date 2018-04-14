@@ -159,6 +159,7 @@ class UserLoginTestCase(TestCase):
         response = client.post('/rest-auth/login/', credentials, format='json')
         # just ignore token that is included in response
         self.assertEqual(response.status_code, 200)
+        self.assertEqual('key' in response.data, True)
         self.assertEqual(is_user_authenticated(client.session.session_key), True)
         self.assertEqual(len(Session.objects.all()), 1)
         self.assertEqual(Session.objects.all()[0].get_decoded().get('_auth_user_id'), str(user.id))
@@ -173,14 +174,30 @@ class UserLoginTestCase(TestCase):
 
     def test_get_session_loggedin_no(self):
         client = APIClient()
-        response = client.get('/api/current-user/', {}, format='json')
+        response = client.get('/api/user-status/', {}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {'loggedin': False})
 
     def test_get_session_loggedin_yes(self):
+        User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
+        client = APIClient()
+        client.login(username='admin-test', password='password1234')
+        response = client.get('/api/user-status/', {}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {'loggedin': True})
+
+    def test_get_user_info(self):
         user = User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
         client = APIClient()
         client.login(username='admin-test', password='password1234')
-        response = client.get('/api/current-user/', {}, format='json')
+        response = client.get('/rest-auth/user/', {}, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {'loggedin': True, 'username': 'admin-test', 'id': user.id})
+        self.assertEqual(response.data['username'], 'admin-test')
+        self.assertEqual(response.data['pk'], user.id)
+
+    def test_get_user_info_no_auth(self):
+        User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
+        client = APIClient()
+        response = client.get('/rest-auth/user/', {}, format='json')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data, {'detail': 'Authentication credentials were not provided.'})

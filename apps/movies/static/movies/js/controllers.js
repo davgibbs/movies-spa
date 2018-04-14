@@ -4,7 +4,11 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
     .controller('MovieListController', function($scope, popupService, $http, AuthService, AUTH_EVENTS) {
 
         $scope.movies = [];
-        $scope.loggedIn = AuthService.isAuthenticated();
+        // On initial load, check if the user is logged in
+        AuthService.getUserStatus()
+            .then(function successCallback(data) {
+                $scope.loggedIn = data;
+            });
 
         $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $scope.loggedIn = false;
@@ -61,7 +65,11 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
     }).controller('MovieViewController', function($scope, $stateParams, $http, AuthService, AUTH_EVENTS) {
 
-        $scope.loggedIn = AuthService.isAuthenticated();
+        AuthService.getUserStatus()
+            .then(function successCallback(data) {
+                $scope.loggedIn = data;
+            });  // This runs a number of times. Need a way to get status once and broadcast auth event
+
         $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $scope.loggedIn = false;
         });
@@ -71,7 +79,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                 $scope.movie = response.data;
             });
 
-    }).controller('MovieCreateController', function($scope, $state, $http) {
+    }).controller('MovieCreateController', function($scope, $state, $http, AuthService) {
 
         $scope.movie = {};
 
@@ -102,8 +110,8 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             fd.append('summary', summary);
             fd.append('genre', $scope.movie.genre);
             fd.append('rating', $scope.movie.rating);
+            fd.append('user', AuthService.userId());
 
-            //need user id
             $http.post("/api/movies", fd, {
                 transformRequest: angular.identity,
                 headers: {
@@ -117,7 +125,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
         };
 
-    }).controller('MovieEditController', function($scope, $state, $stateParams, $http) {
+    }).controller('MovieEditController', function($scope, $state, $stateParams, $http, AuthService) {
 
         $scope.updateMovie = function() {
 
@@ -133,6 +141,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             fd.append('summary', summary);
             fd.append('genre', $scope.movie.genre);
             fd.append('rating', $scope.movie.rating);
+            fd.append('user', AuthService.userId());
 
             $http.put("/api/movies/" + $scope.movie.id, fd, {
                     transformRequest: angular.identity,
@@ -168,9 +177,9 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
     }).controller('NavigationCtrl', function($scope, $rootScope, $location, $state, AuthService, AUTH_EVENTS) {
 
         // On initial load, check if the user is logged in
-        AuthService.getUser()
+        AuthService.getUserStatus()
             .then(function successCallback(data) {
-                $scope.loggedIn = data.loggedin;
+                $scope.loggedIn = data;
             });
 
         $scope.$on(AUTH_EVENTS.loginSuccess, function() {
@@ -205,20 +214,22 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         };
     }).controller('UserViewController', function($scope, AuthService, AUTH_EVENTS) {
 
-        AuthService.getUser()
+        AuthService.getUserStatus()
             .then(function successCallback(data) {
-                $scope.loggedIn = data.loggedin;
+                $scope.loggedIn = data;
                 if ($scope.loggedIn === true){
-                    $scope.userName = data.username;
+                     AuthService.getUser()
+                        .then(function successCallback(data) {
+                            $scope.userName = data.username;
+                        });
                 }
             });
-
 
         $scope.$on(AUTH_EVENTS.loginSuccess, function() {
             $scope.userName = AuthService.username();
         });
         $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
-            $scope.userName = AuthService.username();
+            $scope.userName = null;
         });
 
     }).controller('LoginController', function($scope, $rootScope, $state, AuthService, AUTH_EVENTS) {

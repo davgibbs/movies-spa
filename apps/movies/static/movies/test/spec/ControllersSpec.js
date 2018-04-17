@@ -12,7 +12,12 @@ describe('MovieViewController Tests', function() {
 
     beforeEach(angular.mock.module('movieApp.controllers'));
 
-    var scope, $httpBackend, controller;
+    var scope, $httpBackend, controller, q;
+
+    beforeEach(angular.mock.inject(function($q) {
+        // mock a promise
+        q = $q;
+    }));
 
     beforeEach(angular.mock.inject(function ($rootScope, _$httpBackend_, $controller) {
         $httpBackend = _$httpBackend_;
@@ -28,10 +33,15 @@ describe('MovieViewController Tests', function() {
      $httpBackend.verifyNoOutstandingRequest();
    });
 
-    it("get one is correct", function() {
+   it("get one is correct", function() {
         var stateParams = {id: 1}
         var AuthService = {};
-        AuthService.isAuthenticated = function(){ return true; };
+        AuthService.getUserStatus = function(){
+            var deferred = q.defer();
+            // return true for user logged in
+            deferred.resolve(true);
+            return deferred.promise;
+        };
         var AUTH_EVENTS = {logoutSuccess: 'logout'}
 
         controller('MovieViewController', {
@@ -42,10 +52,10 @@ describe('MovieViewController Tests', function() {
             AUTH_EVENTS: AUTH_EVENTS,
         });
 
-    $httpBackend.flush();
+       $httpBackend.flush();
 
-    expect(scope.movie).toEqual({ 'title': 'superman', 'director': 'James Cameron'});
-  });
+       expect(scope.movie).toEqual({ 'title': 'superman', 'director': 'James Cameron'});
+   });
 
 });
 
@@ -164,11 +174,13 @@ describe('MovieCreateController Tests', function() {
 
     it("create movie is correct", function() {
         var state = {'go' : function (){}};
+        var AuthService = {'userId' : function (){ return 9; }};
 
         var controller = $controller('MovieCreateController', {
             $scope: scope,
             $state: state,
             $httpBackend: $httpBackend,
+            AuthService: AuthService,
         });
 
         spyOn(state, 'go');
@@ -255,7 +267,7 @@ describe('MovieEditController Tests', function() {
             .respond(200, {'id': '1', 'name': 'mymovie'});
     }));
 
-    it("create movie is correct", function() {
+    it("edit movie is correct", function() {
         var state = {'go' : function (){}};
         var stateParams = {id: 1}
 

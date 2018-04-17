@@ -28,29 +28,29 @@ angular.module('movieApp.services', [])
         authService.getUserStatus = function() {
             // Used on initial load of the app to get the user status (logged in or not)
             return $http({
-                        method: 'GET',
-                        url: '/api/user-status/',
-                    })
-                    .then(function(res) {
-                        if (res.data.loggedin === true){
-                            authService.getUser()
-                                .then(function successCallback(data) {
-                                    Session.create('sessionid', data.pk, data.username);
-                                });
-                        }
-                        return res.data.loggedin;
-                    });
+                    method: 'GET',
+                    url: '/api/user-status/',
+                })
+                .then(function(res) {
+                    if (res.data.loggedin === true) {
+                        authService.getUser()
+                            .then(function successCallback(data) {
+                                Session.create('sessionid', data.pk, data.username);
+                            });
+                    }
+                    return res.data.loggedin;
+                });
         };
 
         authService.getUser = function() {
             // Used to get user details from bacend such as ID and username
             return $http({
-                        method: 'GET',
-                        url: '/rest-auth/user/',
-                    })
-                    .then(function(res) {
-                        return res.data;
-                    });
+                    method: 'GET',
+                    url: '/rest-auth/user/',
+                })
+                .then(function(res) {
+                    return res.data;
+                });
         };
 
         authService.isAuthenticated = function() {

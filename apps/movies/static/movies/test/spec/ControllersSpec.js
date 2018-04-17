@@ -64,7 +64,12 @@ describe('MovieListController Tests', function() {
 
     beforeEach(angular.mock.module('movieApp.controllers'));
 
-    var scope, $httpBackend, controller;
+    var scope, $httpBackend, controller, q;
+
+    beforeEach(angular.mock.inject(function($q) {
+        // mock a promise
+        q = $q;
+    }));
 
     beforeEach(angular.mock.inject(function ($rootScope, _$httpBackend_, $controller) {
         $httpBackend = _$httpBackend_;
@@ -85,13 +90,23 @@ describe('MovieListController Tests', function() {
    });
 
     it("get all is correct", function() {
-        var mypopupService, window;
+       var mypopupService, window;
 
+       var AuthService = {};
+        AuthService.getUserStatus = function(){
+            var deferred = q.defer();
+            // return true for user logged in
+            deferred.resolve(true);
+            return deferred.promise;
+        };
+        var AUTH_EVENTS = {logoutSuccess: 'logout'}
         controller('MovieListController', {
             $scope: scope,
             popupService: mypopupService,
             $window: window,
             $httpBackend: $httpBackend,
+            AuthService: AuthService,
+            AUTH_EVENTS: AUTH_EVENTS,
         });
 
         $httpBackend.flush();
@@ -106,11 +121,21 @@ describe('MovieListController Tests', function() {
     it("delete is correct", function() {
 
         var mypopupService = {showPopup : function(){return true;}}
+        var AuthService = {};
+        AuthService.getUserStatus = function(){
+            var deferred = q.defer();
+            // return true for user logged in
+            deferred.resolve(true);
+            return deferred.promise;
+        };
+        var AUTH_EVENTS = {logoutSuccess: 'logout'}
 
         controller('MovieListController', {
             $scope: scope,
             popupService: mypopupService,
             $httpBackend: $httpBackend,
+            AuthService: AuthService,
+            AUTH_EVENTS: AUTH_EVENTS,
         });
 
         var movie = {'id': '2', 'title': 'Break Away', 'release_year': '2016'}
@@ -155,14 +180,13 @@ describe('RatingController Tests', function() {
 
 describe('MovieCreateController Tests', function() {
 
-    beforeEach(angular.mock.module('movieApp'));
-
-    var scope, $httpBackend, $controller;
+    beforeEach(angular.mock.module('movieApp.controllers'));
+    var scope, $httpBackend, controller;
 
     beforeEach(angular.mock.inject(function ($rootScope, _$httpBackend_, _$controller_) {
+        controller = _$controller_;
         $httpBackend = _$httpBackend_;
         scope = $rootScope.$new();
-        $controller = _$controller_;
         $httpBackend
             .when('POST', '/api/movies')
             .respond(200, {'id': '1'});
@@ -176,7 +200,7 @@ describe('MovieCreateController Tests', function() {
         var state = {'go' : function (){}};
         var AuthService = {'userId' : function (){ return 9; }};
 
-        var controller = $controller('MovieCreateController', {
+        controller('MovieCreateController', {
             $scope: scope,
             $state: state,
             $httpBackend: $httpBackend,
@@ -201,23 +225,37 @@ describe('MovieCreateController Tests', function() {
 
 describe('NavigationController Tests', function() {
 
-    beforeEach(angular.mock.module('movieApp'));
+    beforeEach(angular.mock.module('movieApp.controllers'));
 
-    var scope, $controller;
+    var scope, $controller, q;
+    beforeEach(angular.mock.inject(function($q) {
+        // mock a promise
+        q = $q;
+    }));
 
     beforeEach(angular.mock.inject(function ($rootScope, _$controller_) {
         scope = $rootScope.$new();
         $controller = _$controller_;
     }));
 
-
     it("Nav is correct", function() {
+        var AuthService = {};
+        AuthService.getUserStatus = function(){
+            var deferred = q.defer();
+            // return true for user logged in
+            deferred.resolve(true);
+            return deferred.promise;
+        };
+        var AUTH_EVENTS = {loginSuccess: 'login', logoutSuccess: 'logout'}
         var $location = {
             path: function() {return '/movies/1';}
         };
         $controller('NavigationCtrl', {
             $scope : scope,
-            $location: $location
+            $location: $location,
+            $state: state,
+            AuthService: AuthService,
+            AUTH_EVENTS: AUTH_EVENTS,
         });
 
         var current_page = scope.isCurrentPath('/about');
@@ -228,9 +266,13 @@ describe('NavigationController Tests', function() {
         var $location = {
             path: function() {return '/about';}
         };
+        var state = {'go' : function (){}};
         $controller('NavigationCtrl', {
             $scope : scope,
-            $location: $location
+            $location: $location,
+            $state: state,
+            AuthService: AuthService,
+            AUTH_EVENTS: AUTH_EVENTS,
         });
 
         var current_page = scope.isCurrentPath('/about');
@@ -245,7 +287,7 @@ describe('NavigationController Tests', function() {
 
 describe('MovieEditController Tests', function() {
 
-    beforeEach(angular.mock.module('movieApp'));
+    beforeEach(angular.mock.module('movieApp.controllers'));
 
     var scope, $httpBackend, $controller;
 
@@ -270,12 +312,14 @@ describe('MovieEditController Tests', function() {
     it("edit movie is correct", function() {
         var state = {'go' : function (){}};
         var stateParams = {id: 1}
+        var AuthService = {'userId' : function (){ return 9; }};
 
         var controller = $controller('MovieEditController', {
             $scope: scope,
             $state: state,
             $stateParams: stateParams,
             $httpBackend: $httpBackend,
+            AuthService: AuthService,
         });
 
         spyOn(state, 'go');

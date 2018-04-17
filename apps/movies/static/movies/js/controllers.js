@@ -54,7 +54,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                     .then(function successCallback(response) {
                         $scope.loadMovies();
                     }, function errorCallback(response) {
-                        if (response.status == 403){
+                        if (response.status == 403) {
                             popupService.showPopup('Not authorised to delete');
                         } else {
                             popupService.showPopup('Unexpected error ' + response);
@@ -68,7 +68,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         AuthService.getUserStatus()
             .then(function successCallback(data) {
                 $scope.loggedIn = data;
-            });  // This runs a number of times. Need a way to get status once and broadcast auth event
+            }); // This runs a number of times. Need a way to get status once and broadcast auth event
 
         $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $scope.loggedIn = false;
@@ -217,8 +217,8 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         AuthService.getUserStatus()
             .then(function successCallback(data) {
                 $scope.loggedIn = data;
-                if ($scope.loggedIn === true){
-                     AuthService.getUser()
+                if ($scope.loggedIn === true) {
+                    AuthService.getUser()
                         .then(function successCallback(data) {
                             $scope.userName = data.username;
                         });

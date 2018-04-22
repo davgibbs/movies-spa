@@ -4,12 +4,10 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
     .controller('MovieListController', function($scope, popupService, $http, AuthService, AUTH_EVENTS) {
 
         $scope.movies = [];
-        // On initial load, check if the user is logged in
-        AuthService.getUserStatus()
-            .then(function successCallback(data) {
-                $scope.loggedIn = data;
-            });
-
+        $scope.loggedIn = AuthService.isAuthenticated();
+        $scope.$on(AUTH_EVENTS.loginSuccess, function() {
+            $scope.loggedIn = true;
+        });
         $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $scope.loggedIn = false;
         });
@@ -65,11 +63,10 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
     }).controller('MovieViewController', function($scope, $stateParams, $http, AuthService, AUTH_EVENTS) {
 
-        AuthService.getUserStatus()
-            .then(function successCallback(data) {
-                $scope.loggedIn = data;
-            }); // This runs a number of times. Need a way to get status once and broadcast auth event
-
+        $scope.loggedIn = AuthService.isAuthenticated();
+        $scope.$on(AUTH_EVENTS.loginSuccess, function() {
+            $scope.loggedIn = true;
+        });
         $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $scope.loggedIn = false;
         });
@@ -176,12 +173,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
 
     }).controller('NavigationCtrl', function($scope, $rootScope, $location, $state, AuthService, AUTH_EVENTS) {
 
-        // On initial load, check if the user is logged in
-        AuthService.getUserStatus()
-            .then(function successCallback(data) {
-                $scope.loggedIn = data;
-            });
-
+        $scope.loggedIn = AuthService.isAuthenticated();
         $scope.$on(AUTH_EVENTS.loginSuccess, function() {
             $scope.loggedIn = true;
         });
@@ -212,15 +204,15 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.overStar = value;
             $scope.percent = 100 * (value / $scope.max);
         };
-    }).controller('UserViewController', function($scope, AuthService, AUTH_EVENTS) {
+    }).controller('UserViewController', function($scope, $rootScope, AuthService, AUTH_EVENTS) {
 
         AuthService.getUserStatus()
             .then(function successCallback(data) {
-                $scope.loggedIn = data;
+                $scope.loggedIn = data.loggedin;
                 if ($scope.loggedIn === true) {
                     AuthService.getUser()
                         .then(function successCallback(data) {
-                            $scope.userName = data.username;
+                            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                         });
                 }
             });
@@ -243,8 +235,11 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
             $scope.loginError = '';
             AuthService.login(credentials)
                 .then(function successCallback(user) {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                    $state.go('movies', {});
+                    AuthService.getUser()
+                        .then(function successCallback(data) {
+                            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                            $state.go('movies', {});
+                        });
                 }, function errorCallback(message) {
                     $scope.loginError = message.data.non_field_errors[0];
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);

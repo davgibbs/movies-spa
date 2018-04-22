@@ -16,12 +16,7 @@ angular.module('movieApp.services', [])
                     data: JSON.stringify(credentials),
                 })
                 .then(function(res) {
-                    Session.create('sessionid', 9999, credentials.username); // hack while we wait to retrieve
-                    authService.getUser()
-                        .then(function successCallback(data) {
-                            Session.create('sessionid', data.pk, data.username);
-                            return data.username;
-                        });
+                     return res.data;
                 });
         };
 
@@ -32,29 +27,24 @@ angular.module('movieApp.services', [])
                     url: '/api/user-status/',
                 })
                 .then(function(res) {
-                    if (res.data.loggedin === true) {
-                        authService.getUser()
-                            .then(function successCallback(data) {
-                                Session.create('sessionid', data.pk, data.username);
-                            });
-                    }
-                    return res.data.loggedin;
+                    return res.data;
                 });
         };
 
         authService.getUser = function() {
-            // Used to get user details from bacend such as ID and username
+            // Used to get user details from backend such as ID and username, and set the session
             return $http({
                     method: 'GET',
                     url: '/rest-auth/user/',
                 })
                 .then(function(res) {
+                    Session.create('sessionid', res.data.pk, res.data.username);
                     return res.data;
                 });
         };
 
         authService.isAuthenticated = function() {
-            return Session.userId !== null;
+            return !!Session.userId;
         };
 
         authService.username = function() {

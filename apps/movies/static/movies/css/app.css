@@ -56,12 +56,6 @@ h3 {
     display: none;
 }
 
-
-.disabled {
-    cursor: default;
-    pointer-events: none;
-}
-
 /* Login Page */
 
 .login-form {

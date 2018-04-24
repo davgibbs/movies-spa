@@ -114,8 +114,10 @@ describe('MovieListController Tests', function() {
         scope.deleteMovie(movie)
 
         $httpBackend.expectDELETE('/api/movies/2').respond(200, {'results': 'success'});
-        $httpBackend.expectGET('/api/movies').respond(200, {'results': [{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]});
+        $httpBackend.expectGET('/api/movies').respond([{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]);
         $httpBackend.flush();
+
+        expect(scope.movies).toEqual([{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]);
 
   });
 
@@ -126,6 +128,12 @@ describe('UserViewController Tests', function() {
 
     beforeEach(angular.mock.module('movieApp.controllers'));
     var scope, rootscope, controller, q;
+    var AuthService = {};
+    AuthService = function(){
+        return {
+          getUserStatus: jasmine.createSpy()
+        }
+    }
     beforeEach(angular.mock.inject(function($q) {
         // mock a promise
         q = $q;
@@ -135,17 +143,21 @@ describe('UserViewController Tests', function() {
         scope = $rootScope.$new();
         rootscope = $rootScope.$new();
         controller = $controller;
-    }));
 
-    it("rating is correct", function() {
-        var AuthService = {};
-        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'}
-        AuthService.getUserStatus = function(){
+        /*AuthService.getUserStatus = function(){
             var deferred = q.defer();
             // return true for user logged in
             deferred.resolve(true);
             return deferred.promise;
-        };
+        };*/
+    }));
+
+    it("user is correct", function() {
+
+        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'}
+
+
+        spyOn(AuthService, 'getUserStatus');
 
         controller('UserViewController', {
             $scope: scope,
@@ -153,8 +165,11 @@ describe('UserViewController Tests', function() {
             AuthService: AuthService,
             AUTH_EVENTS: AUTH_EVENTS,
         });
-        //expect(scope.userName).toEqual('dd')
-        //expect(scope.loggedin).toEqual(true) fix
+
+        //expect(scope.loggedin).toEqual(true);
+        //expect(mockedDataService.getAllIceCream).toHaveBeenCalled();
+        expect(AuthService.getUserStatus).toHaveBeenCalledWith();
+
     });
 });
 

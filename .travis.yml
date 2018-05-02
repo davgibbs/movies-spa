@@ -1,13 +1,13 @@
 language: python
 node_js:
   - "0.10.25"
-before_install:
-  - npm install
 python:
   - "2.7"
   - "3.5"
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install:
+  - pip install -r requirements.txt
+  - npm install
 # command to run tests
 script:
   - flake8 apps/

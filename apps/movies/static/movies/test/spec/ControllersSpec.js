@@ -124,55 +124,62 @@ describe('MovieListController Tests', function() {
 });
 
 
-/*describe('UserViewController Tests', function() {
+describe('UserViewController Tests', function() {
+
+    var scope, rootscope, controller, q, deferred;
 
     beforeEach(angular.mock.module('movieApp.controllers'));
-    var scope, rootscope, controller, q;
-    var AuthService = {};
-    AuthService = function(){
-        return {
-          getUserStatus: jasmine.createSpy()
-        }
-    }
-    beforeEach(angular.mock.inject(function($q) {
-        // mock a promise
-        q = $q;
-    }));
 
-    beforeEach(angular.mock.inject(function ($rootScope, $controller) {
+    //var AuthService = {};
+   // AuthService = function(){
+    //    return {
+   //       getUserStatus: jasmine.createSpy()
+   //     }
+   // }
+    //beforeEach(angular.mock.inject(function($q) {
+        // mock a promise
+      //  q = $q;
+    //}));
+    // https://stackoverflow.com/questions/35430827/jasmine-test-a-promise-then-function
+
+    beforeEach(angular.mock.inject(function ($rootScope, $controller, _$q_, authService) {
         scope = $rootScope.$new();
         rootscope = $rootScope.$new();
         controller = $controller;
 
-        /*AuthService.getUserStatus = function(){
-            var deferred = q.defer();
+        deferred = _$q_.defer();
+        deferred.resolve(true);
+        spyOn(authService, 'getUserStatus').and.returnValue(deferred.promise);
+
+        //AuthService.getUserStatus = function(){
+        //    var deferred = q.defer();
             // return true for user logged in
-            deferred.resolve(true);
-            return deferred.promise;
-        };*/
-    /*}));
+        //    deferred.resolve(true);
+            //return deferred.promise;
+        //};
+    }));
 
     it("user is correct", function() {
 
         var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'}
 
 
-        spyOn(AuthService, 'getUserStatus');
+        //spyOn(AuthService, 'getUserStatus');
 
         controller('UserViewController', {
             $scope: scope,
             $rootScope: rootscope,
-            AuthService: AuthService,
+            authService: authService,
             AUTH_EVENTS: AUTH_EVENTS,
         });
+        scope.apply();
 
-        //expect(scope.loggedin).toEqual(true);
+        expect(scope.loggedin).toEqual(true);
         //expect(mockedDataService.getAllIceCream).toHaveBeenCalled();
-        expect(AuthService.getUserStatus).toHaveBeenCalledWith();
+        //expect(AuthService.getUserStatus).toHaveBeenCalledWith();
 
     });
 });
-*/
 
 describe('RatingController Tests', function() {
 

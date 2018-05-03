@@ -8,8 +8,8 @@ describe('PopupService Tests', function(){
         function ($provide) {
             $provide.factory('$window', function () {
                 var windowmock = jasmine.createSpy('$window');
-                windowmock.confirm = function(){return true;}
-                return windowmock
+                windowmock.confirm = function(){return true;};
+                return windowmock;
             });
             }
 
@@ -18,7 +18,7 @@ describe('PopupService Tests', function(){
     var popupService;
 
     beforeEach(angular.mock.inject(function (_popupService_) {
-        popupService = _popupService_
+        popupService = _popupService_;
     }));
 
     it('show popup true', function(){
@@ -27,6 +27,6 @@ describe('PopupService Tests', function(){
         var result = popupService.showPopup('hello');
         expect(result).toBe(true);
 
-    })
+    });
 
 });

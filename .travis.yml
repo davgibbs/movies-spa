@@ -13,6 +13,7 @@ script:
   - flake8 apps/
   - python apps/manage.py test movies
   - jshint apps/movies/static/movies/js/
+  - jshint apps/movies/static/movies/test/spec
   - csslint apps/movies/static/movies/css/app.css
   - css-beautify -r apps/movies/static/movies/css/app.css
   - html-beautify -r apps/movies/templates/movies/index.html

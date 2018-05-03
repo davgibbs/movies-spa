@@ -31,7 +31,7 @@ describe('MovieViewController Tests', function() {
    it("get one is correct", function() {
         var stateParams = {id: 1};
         var AuthService = {'isAuthenticated' : function (){ return true; }};
-        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'}
+        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'};
 
         controller('MovieViewController', {
             $scope: scope,
@@ -77,7 +77,7 @@ describe('MovieListController Tests', function() {
         var mypopupService, window;
 
         var AuthService = {'isAuthenticated' : function (){ return true; }};
-        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'}
+        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'};
         controller('MovieListController', {
             $scope: scope,
             popupService: mypopupService,
@@ -89,8 +89,8 @@ describe('MovieListController Tests', function() {
 
         $httpBackend.flush();
 
-        expect(scope.selectedOrder).toEqual({id: 'title'})
-        expect(scope.order_by_options).toEqual( [{type: 'Title A-Z', id: 'title'}, {type: 'Title Z-A', id: '-title'}, {type: 'Lowest Rating', id: 'rating'}, {type: 'Highest Rating', id: '-rating'}, {type: 'Oldest Release', id:'release_year'}, {type: 'Newest Release', id: '-release_year'}])
+        expect(scope.selectedOrder).toEqual({id: 'title'});
+        expect(scope.order_by_options).toEqual( [{type: 'Title A-Z', id: 'title'}, {type: 'Title Z-A', id: '-title'}, {type: 'Lowest Rating', id: 'rating'}, {type: 'Highest Rating', id: '-rating'}, {type: 'Oldest Release', id:'release_year'}, {type: 'Newest Release', id: '-release_year'}]);
 
         expect(scope.movies).toEqual([{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]);
   });
@@ -98,9 +98,9 @@ describe('MovieListController Tests', function() {
 
     it("delete is correct", function() {
 
-        var mypopupService = {showPopup : function(){return true;}}
+        var mypopupService = {showPopup : function(){return true;}};
         var AuthService = {'isAuthenticated' : function (){ return true; }};
-        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'}
+        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'};
 
         controller('MovieListController', {
             $scope: scope,
@@ -110,8 +110,8 @@ describe('MovieListController Tests', function() {
             AUTH_EVENTS: AUTH_EVENTS,
         });
 
-        var movie = {'id': '2', 'title': 'Break Away', 'release_year': '2016'}
-        scope.deleteMovie(movie)
+        var movie = {'id': '2', 'title': 'Break Away', 'release_year': '2016'};
+        scope.deleteMovie(movie);
 
         $httpBackend.expectDELETE('/api/movies/2').respond(200, {'results': 'success'});
         $httpBackend.expectGET('/api/movies').respond([{ 'title': 'superman', 'director': 'James Cameron'}, { 'title': 'batman', 'director': 'Bill Oddy'}]);
@@ -125,59 +125,35 @@ describe('MovieListController Tests', function() {
 
 
 describe('UserViewController Tests', function() {
-
-    var scope, rootscope, controller, q, deferred;
-
     beforeEach(angular.mock.module('movieApp.controllers'));
+    beforeEach(angular.mock.module('movieApp.services'));
 
-    //var AuthService = {};
-   // AuthService = function(){
-    //    return {
-   //       getUserStatus: jasmine.createSpy()
-   //     }
-   // }
-    //beforeEach(angular.mock.inject(function($q) {
-        // mock a promise
-      //  q = $q;
-    //}));
-    // https://stackoverflow.com/questions/35430827/jasmine-test-a-promise-then-function
+    var $scope, rootscope, controller, spyGetUserStatus, $q, deferred;
 
-    beforeEach(angular.mock.inject(function ($rootScope, $controller, _$q_, authService) {
-        scope = $rootScope.$new();
+    beforeEach(angular.mock.inject(function ($rootScope, $controller, _$q_, AuthService) {
+        $q = _$q_;
+        $scope = $rootScope.$new();
         rootscope = $rootScope.$new();
         controller = $controller;
 
         deferred = _$q_.defer();
-        deferred.resolve(true);
-        spyOn(authService, 'getUserStatus').and.returnValue(deferred.promise);
+        spyOn(AuthService, 'getUserStatus').and.returnValue(deferred.promise);
+        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'};
 
-        //AuthService.getUserStatus = function(){
-        //    var deferred = q.defer();
-            // return true for user logged in
-        //    deferred.resolve(true);
-            //return deferred.promise;
-        //};
-    }));
-
-    it("user is correct", function() {
-
-        var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'}
-
-
-        //spyOn(AuthService, 'getUserStatus');
-
-        controller('UserViewController', {
-            $scope: scope,
+         controller('UserViewController', {
+            $scope: $scope,
             $rootScope: rootscope,
-            authService: authService,
+            AuthService: AuthService,
             AUTH_EVENTS: AUTH_EVENTS,
         });
-        scope.apply();
+    }));
 
-        expect(scope.loggedin).toEqual(true);
-        //expect(mockedDataService.getAllIceCream).toHaveBeenCalled();
-        //expect(AuthService.getUserStatus).toHaveBeenCalledWith();
+    it("user is not logged in", function() {
+        deferred.resolve({'loggedin': false});
 
+        $scope.$apply();
+
+        expect($scope.loggedIn).toEqual(false);
     });
 });
 
@@ -197,12 +173,12 @@ describe('RatingController Tests', function() {
             $scope: scope
         });
 
-        scope.hoveringOver(2)
+        scope.hoveringOver(2);
 
-        expect(scope.max).toEqual(5)
+        expect(scope.max).toEqual(5);
         expect(scope.isReadonly).toEqual(false);
-        expect(scope.overStar).toEqual(2)
-        expect(scope.percent).toEqual(40)
+        expect(scope.overStar).toEqual(2);
+        expect(scope.percent).toEqual(40);
 
   });
 
@@ -239,7 +215,7 @@ describe('MovieCreateController Tests', function() {
         });
 
         spyOn(state, 'go');
-        scope.addMovie()
+        scope.addMovie();
 
         $httpBackend.expectPOST('/api/movies');
         //$httpBackend.expectGET('/api/movies-genres');
@@ -248,7 +224,7 @@ describe('MovieCreateController Tests', function() {
 
         expect(scope.movie).toEqual({ release_year: 2016, rating: 3, genre: '1' });
         expect(scope.genres).toEqual([{'name': 'Action', 'id': '1'}]);
-        expect(state.go).toHaveBeenCalledWith('viewMovie', {'id':'1'})
+        expect(state.go).toHaveBeenCalledWith('viewMovie', {'id':'1'});
 
   });
 });
@@ -267,7 +243,7 @@ describe('NavigationController Tests', function() {
 
     it("Nav is correct", function() {
         var AuthService = {'isAuthenticated' : function (){ return true; }};
-        var AUTH_EVENTS = {loginSuccess: 'login', logoutSuccess: 'logout'}
+        var AUTH_EVENTS = {loginSuccess: 'login', logoutSuccess: 'logout'};
         var $location = {
             path: function() {return '/movies/1';}
         };
@@ -281,10 +257,10 @@ describe('NavigationController Tests', function() {
 
         var current_page = scope.isCurrentPath('/about');
         expect(current_page).toEqual(false);
-        var current_page = scope.isCurrentPath('/movies');
+        current_page = scope.isCurrentPath('/movies');
         expect(current_page).toEqual(true);
 
-        var $location = {
+        $location = {
             path: function() {return '/about';}
         };
         var state = {'go' : function (){}};
@@ -296,9 +272,9 @@ describe('NavigationController Tests', function() {
             AUTH_EVENTS: AUTH_EVENTS,
         });
 
-        var current_page = scope.isCurrentPath('/about');
+        current_page = scope.isCurrentPath('/about');
         expect(current_page).toEqual(true);
-        var current_page = scope.isCurrentPath('/movies');
+        current_page = scope.isCurrentPath('/movies');
         expect(current_page).toEqual(false);
   });
 
@@ -331,7 +307,7 @@ describe('MovieEditController Tests', function() {
 
     it("edit movie is correct", function() {
         var state = {'go' : function (){}};
-        var stateParams = {id: 1}
+        var stateParams = {id: 1};
         var AuthService = {'userId' : function (){ return 9; }};
 
         var controller = $controller('MovieEditController', {
@@ -343,7 +319,7 @@ describe('MovieEditController Tests', function() {
         });
 
         spyOn(state, 'go');
-        scope.updateMovie()
+        scope.updateMovie();
 
         $httpBackend.expectPUT('/api/movies/1');
         //$httpBackend.expectGET('/api/movies-genres');
@@ -352,7 +328,7 @@ describe('MovieEditController Tests', function() {
 
         expect(scope.movie).toEqual({ id: '1', name: 'mymovie' });
         expect(scope.genres).toEqual([{'name': 'Action', 'id': '1'}]);
-        expect(state.go).toHaveBeenCalledWith('viewMovie', {'id':'1'})
+        expect(state.go).toHaveBeenCalledWith('viewMovie', {'id':'1'});
 
   });
 });

@@ -123,6 +123,7 @@ describe('MovieListController Tests', function() {
 
 });
 
+//todo test session timeout
 
 describe('UserViewController Tests', function() {
     beforeEach(angular.mock.module('movieApp.controllers'));

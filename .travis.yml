@@ -11,7 +11,8 @@ install:
 # command to run tests
 script:
   - flake8 apps/
-  - python apps/manage.py test movies
+  - coverage3 run --source='./apps' --omit='*migrations*' apps/manage.py test movies
+  - coverage3 report -m
   - jshint apps/movies/static/movies/js/
   - jshint apps/movies/static/movies/test/spec
   - csslint apps/movies/static/movies/css/app.css

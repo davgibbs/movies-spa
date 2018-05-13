@@ -13,24 +13,23 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         });
 
         $scope.order_by_options = [{
-            type: 'Title A-Z',
-            id: 'title'
-        }, {
-            type: 'Title Z-A',
-            id: '-title'
-        }, {
-            type: 'Lowest Rating',
-            id: 'rating'
-        }, {
-            type: 'Highest Rating',
-            id: '-rating'
-        }, {
-            type: 'Oldest Release',
-            id: 'release_year'
-        }, {
-            type: 'Newest Release',
-            id: '-release_year'
-        }];
+                type: 'Title A-Z',
+                id: 'title'
+            }, {
+                type: 'Title Z-A',
+                id: '-title'
+            }, {
+                type: 'Lowest Rating',
+                id: 'rating'
+            }, {
+                type: 'Highest Rating',
+                id: '-rating'
+            }, {
+                type: 'Oldest Release',
+                id: 'release_year'
+            }, {
+                type: 'Newest Release',
+                id: '-release_year'}];
         // Default order is by title
         $scope.selectedOrder = {
             id: 'title'
@@ -118,8 +117,10 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                 $state.go('viewMovie', {
                     id: response.data.id
                 });
-            });
+            }, function errorCallback(response) {
+                alert('Issue adding movie: ' + response.data.title);
 
+            });
         };
 
     }).controller('MovieEditController', function($scope, $state, $stateParams, $http, AuthService) {
@@ -150,8 +151,8 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                     $state.go('viewMovie', {
                         id: $scope.movie.id
                     });
-                }, function(response) {
-                    alert('Issue: ' + response.data.detail);
+                }, function errorCallback(response) {
+                    alert('Issue editing movie: ' + response.data.title);
                 });
 
         };

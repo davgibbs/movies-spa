@@ -67,6 +67,31 @@ class MovieTestCase(TestCase):
         self.assertEqual(len(Movie.objects.all()), 1)
         user.delete()
 
+    def test_add_movie_same_title(self):
+        User.objects.create_user('admin', 'myemail@test.com', 'password123')
+
+        client = APIClient()  # This handles including the sessionid each time
+        client.login(username='admin', password='password123')
+
+        response = client.post('/api/movies', {'title': 'Lion King',
+                                               'summary': 'Lion Movie',
+                                               'release_year': '1994',
+                                               'rating': 2,
+                                               'director': 'Roger Allers'}, format='json')
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Movie.objects.all()), 1)
+
+        response = client.post('/api/movies', {'title': 'Lion King',
+                                               'summary': 'Lion Movie',
+                                               'release_year': '1994',
+                                               'rating': 2,
+                                               'director': 'Roger Allers'}, format='json')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {'title': ['Movie with this title already exists.']})
+        self.assertEqual(len(Movie.objects.all()), 1)
+
     def test_delete_movie(self):
         movie_genre = MovieGenre(name='Drama')
         movie_genre.save()
@@ -96,6 +121,32 @@ class MovieTestCase(TestCase):
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(len(Movie.objects.all()), 1)
+
+    def test_add_movie_delete_different_user(self):
+        User.objects.create_user('userA', 'myemailA@test.com', 'Apassword123')
+        User.objects.create_user('userB', 'myemailB@test.com', 'Bpassword123')
+
+        client = APIClient()
+        client.login(username='userA', password='Apassword123')
+
+        response = client.post('/api/movies', {'title': 'Lion King',
+                                               'summary': 'Lion Movie',
+                                               'release_year': '1994',
+                                               'rating': 2,
+                                               'director': 'Roger Allers'}, format='json')
+        movie_id = response.data['id']
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Movie.objects.all()), 1)
+        # Logout of user A
+        client.post('/rest-auth/logout/', {}, format='json')
+        # Login as user B
+        client.login(username='userB', password='Bpassword123')
+        # Should only be possible to delete movies that you have added! TODO
+        response = client.delete('/api/movies/' + str(movie_id), format='json')
+
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(len(Movie.objects.all()), 0)
 
 
 class MovieGenreTestCase(TestCase):

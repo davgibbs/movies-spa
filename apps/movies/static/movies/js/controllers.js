@@ -152,7 +152,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                         id: $scope.movie.id
                     });
                 }, function errorCallback(response) {
-                    alert('Issue editing movie: ' + response.data.title);
+                    alert('Issue editing movie: ' + response.data.detail);
                 });
 
         };

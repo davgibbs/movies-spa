@@ -142,11 +142,44 @@ class MovieTestCase(TestCase):
         client.post('/rest-auth/logout/', {}, format='json')
         # Login as user B
         client.login(username='userB', password='Bpassword123')
-        # Should only be possible to delete movies that you have added! TODO
+        # Should only be possible to delete movies that you have added
         response = client.delete('/api/movies/' + str(movie_id), format='json')
 
-        self.assertEqual(response.status_code, 204)
-        self.assertEqual(len(Movie.objects.all()), 0)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data['detail'], 'You do not have permission to perform this action.')
+        self.assertEqual(len(Movie.objects.all()), 1)
+
+    def test_add_movie_edit_different_user(self):
+        User.objects.create_user('userA', 'myemailA@test.com', 'Apassword123')
+        User.objects.create_user('userB', 'myemailB@test.com', 'Bpassword123')
+
+        client = APIClient()
+        client.login(username='userA', password='Apassword123')
+
+        response = client.post('/api/movies', {'title': 'Lion King',
+                                               'summary': 'Lion Movie',
+                                               'release_year': '1994',
+                                               'rating': 2,
+                                               'director': 'Roger Allers'}, format='json')
+        movie_id = response.data['id']
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Movie.objects.all()), 1)
+        # Logout of user A
+        client.post('/rest-auth/logout/', {}, format='json')
+        # Login as user B
+        client.login(username='userB', password='Bpassword123')
+        # Should only be possible to edit movies that you have added
+        response = client.put('/api/movies/' + str(movie_id), {'title': 'Lion King',
+                                                               'summary': 'Lion and meerkat Movie',
+                                                               'release_year': '1994',
+                                                               'rating': 2,
+                                                               'director': 'Roger Allers'}, format='json')
+
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data['detail'], 'You do not have permission to perform this action.')
+        self.assertEqual(len(Movie.objects.all()), 1)
+        self.assertEqual(Movie.objects.get(id=movie_id).summary, 'Lion Movie')
 
 
 class MovieGenreTestCase(TestCase):

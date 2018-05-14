@@ -35,7 +35,7 @@
             <tr>
                 <td>
                     <a class="btn btn-info" href="#!/movies">Back</a>
-                    <a class="btn btn-primary" ui-sref="editMovie({id:movie.id})" ng-show="loggedIn">Edit</a>
+                    <a class="btn btn-primary" ui-sref="editMovie({id:movie.id})" ng-show="loggedIn && movie.user === userId">Edit</a>
                 </td>
                 <td>&nbsp;</td>
             </tr>

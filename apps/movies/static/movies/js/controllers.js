@@ -4,12 +4,16 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
     .controller('MovieListController', function($scope, popupService, $http, AuthService, AUTH_EVENTS) {
 
         $scope.movies = [];
+
         $scope.loggedIn = AuthService.isAuthenticated();
+        $scope.userId = AuthService.userId();
         $scope.$on(AUTH_EVENTS.loginSuccess, function() {
             $scope.loggedIn = true;
+            $scope.userId = AuthService.userId();
         });
         $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $scope.loggedIn = false;
+            $scope.userId = null;
         });
 
         $scope.order_by_options = [{
@@ -63,11 +67,14 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
     }).controller('MovieViewController', function($scope, $stateParams, $http, AuthService, AUTH_EVENTS) {
 
         $scope.loggedIn = AuthService.isAuthenticated();
+        $scope.userId = AuthService.userId();
         $scope.$on(AUTH_EVENTS.loginSuccess, function() {
             $scope.loggedIn = true;
+            $scope.userId = AuthService.userId();
         });
         $scope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $scope.loggedIn = false;
+            $scope.userId = null;
         });
 
         $http.get("/api/movies/" + $stateParams.id)
@@ -118,8 +125,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                     id: response.data.id
                 });
             }, function errorCallback(response) {
-                alert('Issue adding movie: ' + response.data.title);
-
+                popupService.showPopup('Issue adding movie: ' + response.data.title);
             });
         };
 
@@ -152,7 +158,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                         id: $scope.movie.id
                     });
                 }, function errorCallback(response) {
-                    alert('Issue editing movie: ' + response.data.detail);
+                    popupService.showPopup('Issue editing movie: ' + response.data.detail);
                 });
 
         };

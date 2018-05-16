@@ -16,7 +16,7 @@ angular.module('movieApp.services', [])
                     data: JSON.stringify(credentials),
                 })
                 .then(function(res) {
-                     return res.data;
+                    return res.data;
                 });
         };
 
@@ -38,7 +38,7 @@ angular.module('movieApp.services', [])
                     url: '/rest-auth/user/',
                 })
                 .then(function(res) {
-                    Session.create('sessionid', res.data.pk, res.data.username);
+                    Session.create(res.data.pk, res.data.username);
                     return res.data;
                 });
         };
@@ -68,14 +68,12 @@ angular.module('movieApp.services', [])
         return authService;
     })
     .service('Session', function() {
-        // Stores the session id, user id and the user name.
+        // Stores the user id and the user name.
         this.create = function(sessionId, userId, userName) {
-            this.id = sessionId;
             this.userId = userId;
             this.userName = userName;
         };
         this.destroy = function() {
-            this.id = null;
             this.userId = null;
             this.userName = null;
         };

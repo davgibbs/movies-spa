@@ -26,7 +26,7 @@ class MovieTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [])
 
-    def test_list_movies_multiple(self):
+    def test_list_movies_one(self):
         movie_genre = MovieGenre(name='Comedy')
         movie_genre.save()
 
@@ -52,7 +52,7 @@ class MovieTestCase(TestCase):
                                                                                 ('username', 'admin')]))])])
 
     def test_add_movie(self):
-        user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
+        User.objects.create_user('admin', 'myemail@test.com', 'password123')
 
         client = APIClient()  # This handles including the sessionid each time
         client.login(username='admin', password='password123')
@@ -65,7 +65,6 @@ class MovieTestCase(TestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(Movie.objects.all()), 1)
-        user.delete()
 
     def test_add_movie_same_title(self):
         User.objects.create_user('admin', 'myemail@test.com', 'password123')
@@ -99,7 +98,7 @@ class MovieTestCase(TestCase):
         movie = Movie(title="Movie 1")
         movie.save()
 
-        user = User.objects.create_user('admin', 'myemail@test.com', 'password123')
+        User.objects.create_user('admin', 'myemail@test.com', 'password123')
 
         client = APIClient()
         client.login(username='admin', password='password123')
@@ -107,7 +106,27 @@ class MovieTestCase(TestCase):
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(len(Movie.objects.all()), 0)
-        user.delete()
+
+    def test_edit_movie(self):
+        movie_genre = MovieGenre(name='Drama')
+        movie_genre.save()
+
+        movie = Movie(title="Movie 1")
+        movie.save()
+
+        User.objects.create_user('admin', 'myemail@test.com', 'password123')
+
+        client = APIClient()
+        client.login(username='admin', password='password123')
+        response = client.put('/api/movies/' + str(movie.id), {'title': 'Movie 2',
+                                                               'summary': 'Lion Movie',
+                                                               'release_year': '1994',
+                                                               'rating': 2,
+                                                               'director': 'Roger Allers'}, format='json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(Movie.objects.all()), 1)
+        self.assertEqual(Movie.objects.get(id=movie.id).title, 'Movie 2')
 
     def test_delete_movie_not_logged_in(self):
         movie_genre = MovieGenre(name='Drama')

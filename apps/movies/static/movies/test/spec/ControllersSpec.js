@@ -30,7 +30,7 @@ describe('MovieViewController Tests', function() {
 
    it("get one is correct", function() {
         var stateParams = {id: 1};
-        var AuthService = {'isAuthenticated' : function (){ return true; }};
+        var AuthService = {'isAuthenticated' : function (){ return true; }, 'userId' : function (){ return 1; }};
         var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'};
 
         controller('MovieViewController', {
@@ -76,7 +76,7 @@ describe('MovieListController Tests', function() {
     it("get all is correct", function() {
         var mypopupService, window;
 
-        var AuthService = {'isAuthenticated' : function (){ return true; }};
+        var AuthService = {'isAuthenticated' : function (){ return true; }, 'userId' : function (){ return 1; }};
         var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'};
         controller('MovieListController', {
             $scope: scope,
@@ -99,7 +99,7 @@ describe('MovieListController Tests', function() {
     it("delete is correct", function() {
 
         var mypopupService = {showPopup : function(){return true;}};
-        var AuthService = {'isAuthenticated' : function (){ return true; }};
+        var AuthService = {'isAuthenticated' : function (){ return true; }, 'userId' : function (){ return 1; }};
         var AUTH_EVENTS = {logoutSuccess: 'logout', loginSuccess: 'login'};
 
         controller('MovieListController', {

@@ -64,7 +64,7 @@ describe('AuthService Tests', function(){
             $provide.factory('Session', function () {
                 var sessionmock = jasmine.createSpy('Session');
                 sessionmock.userName = 'test-user';
-                sessionmock.userId = 'test-id';
+                sessionmock.userId = '1';
                 return sessionmock;
             });
         }
@@ -86,7 +86,7 @@ describe('AuthService Tests', function(){
         expect(username).toBe('test-user');
 
         var userid = AuthService.userId();
-        expect(userid).toBe('test-id');
+        expect(userid).toBe('1');
 
     });
 

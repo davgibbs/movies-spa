@@ -17,23 +17,24 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         });
 
         $scope.order_by_options = [{
-                type: 'Title A-Z',
-                id: 'title'
-            }, {
-                type: 'Title Z-A',
-                id: '-title'
-            }, {
-                type: 'Lowest Rating',
-                id: 'rating'
-            }, {
-                type: 'Highest Rating',
-                id: '-rating'
-            }, {
-                type: 'Oldest Release',
-                id: 'release_year'
-            }, {
-                type: 'Newest Release',
-                id: '-release_year'}];
+            type: 'Title A-Z',
+            id: 'title'
+        }, {
+            type: 'Title Z-A',
+            id: '-title'
+        }, {
+            type: 'Lowest Rating',
+            id: 'rating'
+        }, {
+            type: 'Highest Rating',
+            id: '-rating'
+        }, {
+            type: 'Oldest Release',
+            id: 'release_year'
+        }, {
+            type: 'Newest Release',
+            id: '-release_year'
+        }];
         // Default order is by title
         $scope.selectedOrder = {
             id: 'title'
@@ -56,9 +57,9 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                         $scope.loadMovies();
                     }, function errorCallback(response) {
                         if (response.status == 403) {
-                            popupService.showPopup('Not authorised to delete');
+                            alert('Not authorised to delete');
                         } else {
-                            popupService.showPopup('Unexpected error ' + response);
+                            alert('Unexpected error ' + response);
                         }
                     });
             }
@@ -125,7 +126,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                     id: response.data.id
                 });
             }, function errorCallback(response) {
-                popupService.showPopup('Issue adding movie: ' + response.data.title);
+                alert('Issue adding movie: ' + response.data.title);
             });
         };
 
@@ -158,7 +159,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                         id: $scope.movie.id
                     });
                 }, function errorCallback(response) {
-                    popupService.showPopup('Issue editing movie: ' + response.data.detail);
+                    alert('Issue editing movie: ' + response.data.detail);
                 });
 
         };

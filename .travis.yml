@@ -6,7 +6,7 @@ python:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
-  - npm install -g jshint csslint phantomjs-prebuilt js-beautify jasmine-node karma jasmine jasmine-core karma-jasmine karma-firefox-launcher karma-chrome-launcher karma-phantomjs-launcher karma-coverage
+  - npm install -g jshint csslint phantomjs-prebuilt js-beautify jasmine-node karma jasmine jasmine-core karma-jasmine karma-firefox-launcher karma-chrome-launcher karma-phantomjs-launcher karma-coverage htmlhint
 # command to run tests
 script:
   - flake8 apps/
@@ -15,6 +15,8 @@ script:
   - jshint apps/movies/static/movies/js/
   - jshint apps/movies/static/movies/test/spec
   - csslint apps/movies/static/movies/css/app.css
+  - htmlhint --config htmlhint.conf apps/movies/templates/movies/index.html
+  - htmlhint --config htmlhint.conf apps/movies/static/movies/partials/
   - css-beautify -r apps/movies/static/movies/css/app.css
   - html-beautify -r apps/movies/templates/movies/index.html
   - html-beautify -r apps/movies/static/movies/partials/*.html

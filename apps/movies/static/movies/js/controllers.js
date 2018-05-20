@@ -59,7 +59,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                         if (response.status == 403) {
                             alert('Not authorised to delete');
                         } else {
-                            alert('Unexpected error ' + response);
+                            alert('Unexpected error ' + JSON.stringify(response));
                         }
                     });
             }
@@ -126,7 +126,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                     id: response.data.id
                 });
             }, function errorCallback(response) {
-                alert('Issue adding movie: ' + response.data.title);
+                alert('Issue adding movie: ' + JSON.stringify(response.data));
             });
         };
 
@@ -159,7 +159,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                         id: $scope.movie.id
                     });
                 }, function errorCallback(response) {
-                    alert('Issue editing movie: ' + response.data.detail);
+                    alert('Issue editing movie: ' + JSON.stringify(response.data));
                 });
 
         };

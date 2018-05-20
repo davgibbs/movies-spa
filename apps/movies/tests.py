@@ -91,6 +91,23 @@ class MovieTestCase(TestCase):
         self.assertEqual(response.data, {'title': ['Movie with this title already exists.']})
         self.assertEqual(len(Movie.objects.all()), 1)
 
+    def test_add_movie_incorrect_userid_format(self):
+        User.objects.create_user('admin', 'myemail@test.com', 'password123')
+
+        client = APIClient()  # This handles including the sessionid each time
+        client.login(username='admin', password='password123')
+
+        response = client.post('/api/movies', {'title': 'Lion King',
+                                               'summary': 'Lion Movie',
+                                               'release_year': '1994',
+                                               'rating': 2,
+                                               'director': 'Roger Allers',
+                                               'user': 'admin2'}, format='json')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {'user': ['Incorrect type. Expected pk value, received str.']})
+        self.assertEqual(len(Movie.objects.all()), 0)
+
     def test_delete_movie(self):
         movie_genre = MovieGenre(name='Drama')
         movie_genre.save()

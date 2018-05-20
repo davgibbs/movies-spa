@@ -69,7 +69,7 @@ angular.module('movieApp.services', [])
     })
     .service('Session', function() {
         // Stores the user id and the user name.
-        this.create = function(sessionId, userId, userName) {
+        this.create = function(userId, userName) {
             this.userId = userId;
             this.userName = userName;
         };

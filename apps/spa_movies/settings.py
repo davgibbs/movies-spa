@@ -129,13 +129,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Expire session after 1 hour
-SESSION_COOKIE_AGE = 60 * 60
+# Expire session after 3 hours
+SESSION_COOKIE_AGE = 60 * 60 * 3
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )

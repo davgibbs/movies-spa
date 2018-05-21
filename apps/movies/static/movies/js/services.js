@@ -6,7 +6,7 @@ angular.module('movieApp.services', [])
             return $window.confirm(message);
         };
     })
-    .factory('AuthService', function($q, $http, Session) {
+    .factory('AuthService', function($http, Session) {
         var authService = {};
 
         authService.login = function(credentials) {

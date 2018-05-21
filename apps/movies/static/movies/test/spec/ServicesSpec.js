@@ -44,8 +44,8 @@ describe('Session Tests', function(){
     it('session true', function(){
 
         expect(angular.isFunction(Session.create)).toBe(true);
-        Session.create('sessionId', 'userid', 'username');
-        expect(Session.userId).toBe('userid');
+        Session.create(11, 'username');
+        expect(Session.userId).toBe(11);
         expect(Session.userName).toBe('username');
 
         Session.destroy();
@@ -64,7 +64,7 @@ describe('AuthService Tests', function(){
             $provide.factory('Session', function () {
                 var sessionmock = jasmine.createSpy('Session');
                 sessionmock.userName = 'test-user';
-                sessionmock.userId = '1';
+                sessionmock.userId = 1;
                 return sessionmock;
             });
         }
@@ -86,8 +86,12 @@ describe('AuthService Tests', function(){
         expect(username).toBe('test-user');
 
         var userid = AuthService.userId();
-        expect(userid).toBe('1');
+        expect(userid).toBe(1);
 
+    });
+
+    it('get user is sucessful', function(){
+        expect(angular.isFunction(AuthService.getUser)).toBe(true);
     });
 
 });

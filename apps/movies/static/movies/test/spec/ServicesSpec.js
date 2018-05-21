@@ -65,16 +65,19 @@ describe('AuthService Tests', function(){
                 var sessionmock = jasmine.createSpy('Session');
                 sessionmock.userName = 'test-user';
                 sessionmock.userId = 1;
+                sessionmock.create = function(){};
                 return sessionmock;
             });
         }
     ));
 
-    var AuthService;
+    var AuthService, httpBackend;
 
-    beforeEach(angular.mock.inject(function (_AuthService_, Session) {
+    beforeEach(angular.mock.inject(function (_AuthService_, $httpBackend) {
         AuthService = _AuthService_;
+        httpBackend = $httpBackend;
     }));
+
 
     it('is authenticated', function(){
 
@@ -92,6 +95,15 @@ describe('AuthService Tests', function(){
 
     it('get user is sucessful', function(){
         expect(angular.isFunction(AuthService.getUser)).toBe(true);
+
+        httpBackend
+            .when('GET', '/rest-auth/user/')
+            .respond(200, {'pk': 1, 'username': 'user99'});
+
+        AuthService.getUser().then(function(data) {
+          expect(data).toEqual({'pk': 1, 'username': 'user99'});
+        });
+        httpBackend.flush();
     });
 
 });

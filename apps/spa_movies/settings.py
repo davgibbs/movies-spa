@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'movies.apps.MoviesConfig',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE_CLASSES = [

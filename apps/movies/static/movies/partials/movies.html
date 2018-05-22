@@ -1,11 +1,10 @@
 <div class="centre_text">
-    <a ui-sref="newMovie" class="btn-primary btn-lg nodecoration" ng-show="loggedIn">Add New Movie</a>
-    <br>
-    <br>
+    <p><a ui-sref="newMovie" class="btn-primary btn-lg nodecoration" ng-show="loggedIn">Add New Movie</a></p>
+
     <select class="form-control" ng-model="selectedOrder" ng-options="option.type for option in order_by_options track by option.id"></select>
     <p><input type="text" class="form-control" ng-model="searchText" placeholder="Search by Title"></p>
 
-    <div class="col-sm-4 movie-cell" dir-paginate="movie in movies | filter:{title:searchText} | orderBy: selectedOrder.id | itemsPerPage:6">
+    <div class="col-sm-6 col-md-4" dir-paginate="movie in movies | filter:{title:searchText} | orderBy: selectedOrder.id | itemsPerPage:6">
         <div class="thumbnail">
             <img ng-src="[[movie.image]]" alt="[[movie.title]] image" style="height:150px">
             <div class="caption">

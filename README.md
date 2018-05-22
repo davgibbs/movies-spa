@@ -1,11 +1,11 @@
 # movies-spa   [![Build Status](https://travis-ci.org/davgibbs/movies-spa.svg?branch=master)](https://travis-ci.org/davgibbs/movies-spa)
 A small website to keep track of movies you have watched and rated.
 
-The website is a Single Page Application that allows the user to add, edit and delete movies from the database. Each movie has an assocated image, genre and rating. Technologies such as Django, Django REST framework, AngularJS and Twitter Bootstrap are used.
+The website is a Single-Page Application that allows the authenticated user to add, edit and delete their movies from the database. Non-authenticated users can only view the movies. Each movie has an associated image, genre and rating. Technologies such as Django, Django REST framework, AngularJS and Twitter Bootstrap are used.
 
 Most of the Movie information was taken from http://www.imdb.com
 
-![Movies Gallery Image](https://github.com/davgibbs/movies-spa/blob/master/apps/movies/static/movies/images/movies_list.png)
+![Movies Gallery Image](https://github.com/davgibbs/movies-spa/blob/master/apps/movies/static/movies/images/david-loggedin.png)
 
 ## Developer Information
 Need a virtualenv set up with requirements.txt dependencies installed:
@@ -23,7 +23,3 @@ Then as with all Django projects, run the "migrate" command to create the databa
 After the "runserver" to see the base page above (with no movies added yet). You will need to add 'Movie Genres' using the Django admin ('/admin/') before adding your first movie using the front-end.
 
 When developing it may be useful to run "gulp" in the root directory to re-fresh the page when and changes to static files are made. All AngularJS code is in the Django "static" directory.
-
-
-Future Spec
-Have a login or 'just browsing page' as home. Ability to log out and then 'just browse' Cannot add anything if just browsing

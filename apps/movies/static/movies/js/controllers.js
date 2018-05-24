@@ -53,7 +53,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         $scope.deleteMovie = function(movie) {
             if (popupService.showPopup('Really delete "' + movie.title + ' (' + movie.release_year + ')"?')) {
                 $http.delete("/api/movies/" + movie.id)
-                    .then(function successCallback(response) {
+                    .then(function successCallback() {
                         $scope.loadMovies();
                     }, function errorCallback(response) {
                         if (response.status == 403) {
@@ -154,7 +154,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                         'Content-Type': undefined
                     }
                 })
-                .then(function successCallback(response) {
+                .then(function successCallback() {
                     $state.go('viewMovie', {
                         id: $scope.movie.id
                     });
@@ -198,7 +198,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         $scope.logout = function($event) {
             $event.preventDefault();
             AuthService.logout()
-                .then(function successCallback(user) {
+                .then(function successCallback() {
                     $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
                     $state.go('movies', {});
                 });
@@ -219,7 +219,7 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
                 $scope.loggedIn = data.loggedin;
                 if ($scope.loggedIn === true) {
                     AuthService.getUser()
-                        .then(function successCallback(data) {
+                        .then(function successCallback() {
                             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                         });
                 }
@@ -242,9 +242,9 @@ angular.module('movieApp.controllers', ['angularUtils.directives.dirPagination']
         $scope.login = function(credentials) {
             $scope.loginError = '';
             AuthService.login(credentials)
-                .then(function successCallback(user) {
+                .then(function successCallback() {
                     AuthService.getUser()
-                        .then(function successCallback(data) {
+                        .then(function successCallback() {
                             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                             $state.go('movies', {});
                         });

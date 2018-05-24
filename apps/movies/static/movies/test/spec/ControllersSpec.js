@@ -129,7 +129,7 @@ describe('UserViewController Tests', function() {
     beforeEach(angular.mock.module('movieApp.controllers'));
     beforeEach(angular.mock.module('movieApp.services'));
 
-    var $scope, rootscope, controller, spyGetUserStatus, $q, deferred;
+    var $scope, rootscope, controller, $q, deferred;
 
     beforeEach(angular.mock.inject(function ($rootScope, $controller, _$q_, AuthService) {
         $q = _$q_;
@@ -311,7 +311,7 @@ describe('MovieEditController Tests', function() {
         var stateParams = {id: 1};
         var AuthService = {'userId' : function (){ return 9; }};
 
-        var controller = $controller('MovieEditController', {
+        $controller('MovieEditController', {
             $scope: scope,
             $state: state,
             $stateParams: stateParams,

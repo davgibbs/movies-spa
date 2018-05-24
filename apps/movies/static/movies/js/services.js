@@ -55,12 +55,12 @@ angular.module('movieApp.services', [])
             return Session.userId;
         };
 
-        authService.logout = function(credentials) {
+        authService.logout = function() {
             return $http({
                     method: 'POST',
                     url: '/rest-auth/logout/',
                 })
-                .then(function(res) {
+                .then(function() {
                     Session.destroy();
                 });
         };

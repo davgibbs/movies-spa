@@ -14,3 +14,14 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Instance must have an attribute named `user`.
         return obj.user == request.user
+
+
+class IsReadOnly(permissions.BasePermission):
+    """
+    Object-level permission to only allow read-only operations.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        return request.method in permissions.SAFE_METHODS

@@ -228,7 +228,23 @@ class MovieGenreTestCase(TestCase):
         response = client.get('/api/movies-genres', {}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [OrderedDict([('id', 1), ('name', 'Comedy')])])
-        movie_genre.delete()
+
+    def test_make_sure_read_only_delete(self):
+        movie_genre = MovieGenre(name='Comedy')
+        movie_genre.save()
+
+        client = APIClient()
+        response = client.delete('/api/movies-genres/' + str(movie_genre.id), format='json')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data, {'detail': 'Authentication credentials were not provided.'})
+
+        User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
+        client.login(username='admin-test', password='password1234')
+        response = client.delete('/api/movies-genres/' + str(movie_genre.id), format='json')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.data, {'detail': 'You do not have permission to perform this action.'})
+        self.assertEqual(len(MovieGenre.objects.all()), 1)
+        self.assertEqual(MovieGenre.objects.get(id=movie_genre.id).name, 'Comedy')
 
 
 class UserLoginTestCase(TestCase):

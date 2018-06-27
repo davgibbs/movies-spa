@@ -1,3 +1,4 @@
+import os
 from collections import OrderedDict
 
 from django.test import TestCase
@@ -5,6 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from django.contrib.sessions.models import Session
 from django.contrib.auth import SESSION_KEY
+from django.conf import settings
 
 from movies.models import Movie, MovieGenre
 
@@ -22,7 +24,7 @@ class MovieTestCase(TestCase):
 
     def test_list_movies(self):
         client = APIClient()
-        response = client.get('/api/movies', {}, format='json')
+        response = client.get('/api/movies', {})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [])
 
@@ -35,7 +37,7 @@ class MovieTestCase(TestCase):
         movie.save()
 
         client = APIClient()
-        response = client.get('/api/movies', {}, format='json')
+        response = client.get('/api/movies', {})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [OrderedDict([('id', 1),
                                                       ('title', 'Movie 1'),
@@ -61,10 +63,46 @@ class MovieTestCase(TestCase):
                                                'summary': 'Lion Movie',
                                                'release_year': '1994',
                                                'rating': 2,
-                                               'director': 'Roger Allers'}, format='json')
+                                               'director': 'Roger Allers'})
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(Movie.objects.all()), 1)
+        self.assertEqual(response.data, {'user': 1, 'rating': 2, 'genre_obj': None, 'id': 1, 'release_year': 1994,
+                                         'image': 'http://testserver/media/movies/Movie.jpg', 'genre': 1,
+                                         'title': 'Lion King',
+                                         'user_obj': OrderedDict([('id', 1), ('username', 'admin')]),
+                                         'summary': 'Lion Movie',
+                                         'director': 'Roger Allers'})
+
+    def test_add_movie_with_image(self):
+        User.objects.create_user('admin', 'myemail@test.com', 'password123')
+
+        client = APIClient()  # This handles including the sessionid each time
+        client.login(username='admin', password='password123')
+
+        # Make sure the media folder does not have an image of the same name - for checking response as string added
+        try:
+            os.remove(settings.BASE_DIR + '/media/movies/test-image.jpg')
+        except FileNotFoundError:
+            pass
+
+        with open(settings.BASE_DIR + '/movies/test_images/test-image.jpg', 'rb') as fp:
+            # Send a multipart request
+            response = client.post('/api/movies', {'title': 'Lion King',
+                                                   'summary': 'Lion Movie',
+                                                   'release_year': '1994',
+                                                   'rating': 2,
+                                                   'director': 'Roger Allers',
+                                                   'image': fp})
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Movie.objects.all()), 1)
+        self.assertEqual(response.data, {'user': 1, 'rating': 2, 'genre_obj': None, 'id': 1, 'release_year': 1994,
+                                         'image': 'http://testserver/media/movies/test-image.jpg', 'genre': 1,
+                                         'title': 'Lion King',
+                                         'user_obj': OrderedDict([('id', 1), ('username', 'admin')]),
+                                         'summary': 'Lion Movie',
+                                         'director': 'Roger Allers'})
 
     def test_add_movie_same_title(self):
         User.objects.create_user('admin', 'myemail@test.com', 'password123')
@@ -72,11 +110,12 @@ class MovieTestCase(TestCase):
         client = APIClient()  # This handles including the sessionid each time
         client.login(username='admin', password='password123')
 
+        self.assertEqual(len(Movie.objects.all()), 0)
         response = client.post('/api/movies', {'title': 'Lion King',
                                                'summary': 'Lion Movie',
                                                'release_year': '1994',
                                                'rating': 2,
-                                               'director': 'Roger Allers'}, format='json')
+                                               'director': 'Roger Allers'})
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(Movie.objects.all()), 1)
@@ -85,7 +124,7 @@ class MovieTestCase(TestCase):
                                                'summary': 'Lion Movie',
                                                'release_year': '1994',
                                                'rating': 2,
-                                               'director': 'Roger Allers'}, format='json')
+                                               'director': 'Roger Allers'})
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, {'title': ['Movie with this title already exists.']})
@@ -102,7 +141,7 @@ class MovieTestCase(TestCase):
                                                'release_year': '1994',
                                                'rating': 2,
                                                'director': 'Roger Allers',
-                                               'user': 'admin2'}, format='json')
+                                               'user': 'admin2'})
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, {'user': ['Incorrect type. Expected pk value, received str.']})
@@ -119,7 +158,7 @@ class MovieTestCase(TestCase):
 
         client = APIClient()
         client.login(username='admin', password='password123')
-        response = client.delete('/api/movies/' + str(movie.id), format='json')
+        response = client.delete('/api/movies/' + str(movie.id))
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(len(Movie.objects.all()), 0)
@@ -139,11 +178,34 @@ class MovieTestCase(TestCase):
                                                                'summary': 'Lion Movie',
                                                                'release_year': '1994',
                                                                'rating': 2,
-                                                               'director': 'Roger Allers'}, format='json')
+                                                               'director': 'Roger Allers'})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(Movie.objects.all()), 1)
         self.assertEqual(Movie.objects.get(id=movie.id).title, 'Movie 2')
+
+    def test_edit_movie_cannot_edit_id(self):
+        movie_genre = MovieGenre(name='Drama')
+        movie_genre.save()
+
+        movie = Movie(title="Movie 1")
+        movie.save()
+
+        User.objects.create_user('admin', 'myemail@test.com', 'password123')
+
+        client = APIClient()
+        client.login(username='admin', password='password123')
+        response = client.put('/api/movies/' + str(movie.id), {'id': 5,
+                                                               'title': 'Movie 2',
+                                                               'summary': 'Lion Movie',
+                                                               'release_year': '1994',
+                                                               'rating': 2,
+                                                               'director': 'Roger Allers'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(Movie.objects.all()), 1)
+        self.assertEqual(Movie.objects.get(id=movie.id).title, 'Movie 2')
+        self.assertEqual(Movie.objects.get(id=movie.id).id, 1)
 
     def test_delete_movie_not_logged_in(self):
         movie_genre = MovieGenre(name='Drama')
@@ -153,7 +215,7 @@ class MovieTestCase(TestCase):
         movie.save()
 
         client = APIClient()
-        response = client.delete('/api/movies/' + str(movie.id), format='json')
+        response = client.delete('/api/movies/' + str(movie.id))
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(len(Movie.objects.all()), 1)
@@ -169,17 +231,17 @@ class MovieTestCase(TestCase):
                                                'summary': 'Lion Movie',
                                                'release_year': '1994',
                                                'rating': 2,
-                                               'director': 'Roger Allers'}, format='json')
+                                               'director': 'Roger Allers'})
         movie_id = response.data['id']
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(Movie.objects.all()), 1)
         # Logout of user A
-        client.post('/rest-auth/logout/', {}, format='json')
+        client.post('/rest-auth/logout/', {})
         # Login as user B
         client.login(username='userB', password='Bpassword123')
         # Should only be possible to delete movies that you have added
-        response = client.delete('/api/movies/' + str(movie_id), format='json')
+        response = client.delete('/api/movies/' + str(movie_id))
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data['detail'], 'You do not have permission to perform this action.')
@@ -196,13 +258,13 @@ class MovieTestCase(TestCase):
                                                'summary': 'Lion Movie',
                                                'release_year': '1994',
                                                'rating': 2,
-                                               'director': 'Roger Allers'}, format='json')
+                                               'director': 'Roger Allers'})
         movie_id = response.data['id']
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(Movie.objects.all()), 1)
         # Logout of user A
-        client.post('/rest-auth/logout/', {}, format='json')
+        client.post('/rest-auth/logout/', {})
         # Login as user B
         client.login(username='userB', password='Bpassword123')
         # Should only be possible to edit movies that you have added
@@ -210,7 +272,7 @@ class MovieTestCase(TestCase):
                                                                'summary': 'Lion and meerkat Movie',
                                                                'release_year': '1994',
                                                                'rating': 2,
-                                                               'director': 'Roger Allers'}, format='json')
+                                                               'director': 'Roger Allers'})
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data['detail'], 'You do not have permission to perform this action.')
@@ -225,7 +287,7 @@ class MovieGenreTestCase(TestCase):
         movie_genre.save()
 
         client = APIClient()
-        response = client.get('/api/movies-genres', {}, format='json')
+        response = client.get('/api/movies-genres', {})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [OrderedDict([('id', 1), ('name', 'Comedy')])])
 
@@ -234,13 +296,13 @@ class MovieGenreTestCase(TestCase):
         movie_genre.save()
 
         client = APIClient()
-        response = client.delete('/api/movies-genres/' + str(movie_genre.id), format='json')
+        response = client.delete('/api/movies-genres/' + str(movie_genre.id))
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data, {'detail': 'Authentication credentials were not provided.'})
 
         User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
         client.login(username='admin-test', password='password1234')
-        response = client.delete('/api/movies-genres/' + str(movie_genre.id), format='json')
+        response = client.delete('/api/movies-genres/' + str(movie_genre.id))
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data, {'detail': 'You do not have permission to perform this action.'})
         self.assertEqual(len(MovieGenre.objects.all()), 1)
@@ -258,7 +320,7 @@ class UserLoginTestCase(TestCase):
 
         # login user
         credentials = {'username': 'admin-test', 'password': 'password1234'}
-        response = client.post('/rest-auth/login/', credentials, format='json')
+        response = client.post('/rest-auth/login/', credentials)
         # just ignore token that is included in response
         self.assertEqual(response.status_code, 200)
         self.assertEqual(is_user_authenticated(client.session.session_key), True)
@@ -275,7 +337,7 @@ class UserLoginTestCase(TestCase):
 
         # login user
         credentials = {'username': 'admin-test', 'password': 'password1234s'}
-        response = client.post('/rest-auth/login/', credentials, format='json')
+        response = client.post('/rest-auth/login/', credentials)
         # just ignore token that is included in response
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, {'non_field_errors': ['Unable to log in with provided credentials.']})
@@ -292,7 +354,7 @@ class UserLoginTestCase(TestCase):
 
         # login user
         credentials = {'username': 'admin-test', 'password': 'password1234'}
-        response = client.post('/rest-auth/login/', credentials, format='json')
+        response = client.post('/rest-auth/login/', credentials)
         # just ignore token that is included in response
         self.assertEqual(response.status_code, 200)
         self.assertEqual('key' in response.data, True)
@@ -301,7 +363,7 @@ class UserLoginTestCase(TestCase):
         self.assertEqual(Session.objects.all()[0].get_decoded().get('_auth_user_id'), str(user.id))
 
         # Now logout
-        response = client.post('/rest-auth/logout/', {}, format='json')
+        response = client.post('/rest-auth/logout/', {})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {'detail': 'Successfully logged out.'})
 
@@ -310,7 +372,7 @@ class UserLoginTestCase(TestCase):
 
     def test_get_session_loggedin_no(self):
         client = APIClient()
-        response = client.get('/api/user-status/', {}, format='json')
+        response = client.get('/api/user-status/', {})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {'loggedin': False})
 
@@ -318,7 +380,7 @@ class UserLoginTestCase(TestCase):
         User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
         client = APIClient()
         client.login(username='admin-test', password='password1234')
-        response = client.get('/api/user-status/', {}, format='json')
+        response = client.get('/api/user-status/', {})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {'loggedin': True})
 
@@ -326,7 +388,7 @@ class UserLoginTestCase(TestCase):
         user = User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
         client = APIClient()
         client.login(username='admin-test', password='password1234')
-        response = client.get('/rest-auth/user/', {}, format='json')
+        response = client.get('/rest-auth/user/', {})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['username'], 'admin-test')
         self.assertEqual(response.data['pk'], user.id)
@@ -334,6 +396,6 @@ class UserLoginTestCase(TestCase):
     def test_get_user_info_no_auth(self):
         User.objects.create_user('admin-test', 'myemail@test.com', 'password1234')
         client = APIClient()
-        response = client.get('/rest-auth/user/', {}, format='json')
+        response = client.get('/rest-auth/user/', {})
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data, {'detail': 'Authentication credentials were not provided.'})

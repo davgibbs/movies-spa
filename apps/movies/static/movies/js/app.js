@@ -1,32 +1,44 @@
 'use strict';
 
-var movieapp = angular.module('movieApp', ['ui.router', 'ui.bootstrap', 'movieApp.controllers', 'movieApp.services', 'movieApp.directives']);
+var app = angular.module('movieApp', ['ui.router', 'ui.bootstrap', 'movieApp.controllers', 'movieApp.services', 'movieApp.directives']);
 
-movieapp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $interpolateProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $interpolateProvider) {
 
         $stateProvider.
         state('movies', {
             url: '/movies',
-            templateUrl: '/static/movies/partials/movies.html',
+            templateProvider: function($templateCache) {
+                return $templateCache.get('apps/movies/static/movies/partials/movies.html');
+            },
             controller: 'MovieListController'
         }).state('viewMovie', {
             url: '/movies/:id/view',
-            templateUrl: '/static/movies/partials/movie-view.html',
+            templateProvider: function($templateCache) {
+                return $templateCache.get('apps/movies/static/movies/partials/movie-view.html');
+            },
             controller: 'MovieViewController'
         }).state('newMovie', {
             url: '/movies/new',
-            templateUrl: '/static/movies/partials/movie-add.html',
+            templateProvider: function($templateCache) {
+                return $templateCache.get('apps/movies/static/movies/partials/movie-add.html');
+            },
             controller: 'MovieCreateController'
         }).state('editMovie', {
             url: '/movies/:id/edit',
-            templateUrl: '/static/movies/partials/movie-edit.html',
+            templateProvider: function($templateCache) {
+                return $templateCache.get('apps/movies/static/movies/partials/movie-edit.html');
+            },
             controller: 'MovieEditController'
         }).state('about', {
             url: '/about',
-            templateUrl: '/static/movies/partials/about.html'
+            templateProvider: function($templateCache) {
+                return $templateCache.get('apps/movies/static/movies/partials/about.html');
+            },
         }).state('login', {
             url: '/login',
-            templateUrl: '/static/movies/partials/login.html',
+            templateProvider: function($templateCache) {
+                return $templateCache.get('apps/movies/static/movies/partials/login.html');
+            },
             controller: 'LoginController'
         });
 

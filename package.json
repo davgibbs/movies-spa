@@ -21,6 +21,8 @@
     "phantomjs-prebuilt": "^2.1.16"
   },
   "devDependencies": {
+    "gulp-html2js": "^0.4.2",
+    "gulp-minify-html": "^1.0.6",
     "karma-phantomjs-launcher": "^1.0.4"
   },
   "scripts": {

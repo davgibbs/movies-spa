@@ -20,6 +20,14 @@ def is_user_authenticated(session_key):
         return False
 
 
+class MoveTestTemplate(TestCase):
+
+    def test_index_ok(self):
+        response = self.client.get('')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("Movie Gallery" in response.content.decode())
+
+
 class MovieTestCase(TestCase):
 
     def test_list_movies(self):

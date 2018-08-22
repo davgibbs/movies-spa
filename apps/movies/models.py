@@ -24,7 +24,7 @@ class Movie(models.Model):
     summary = models.TextField(max_length=400, blank=True, default='')
     release_year = models.PositiveIntegerField(default=2016)
     director = models.CharField(max_length=100, blank=True, default='')
-    genre = models.ForeignKey(MovieGenre, related_name='movie_genre', default=1)
+    genre = models.ForeignKey(MovieGenre, related_name='movie_genre', default=1, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='movies/', default='movies/Movie.jpg')
     rating = models.PositiveIntegerField(validators=[MaxValueValidator(5)], default=3)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
